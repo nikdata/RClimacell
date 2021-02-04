@@ -25,6 +25,9 @@ knitr::opts_chunk$set(
 ** WIP **
 This package is still under development. Please use with caution. Functions have not been fully tested.
 
+** NOTE **
+THIS IS NOT AN OFFICIAL CLIMACELL PACKAGE. This package is not supported nor endorsed by Climacell.
+
 The {RClimacell} package is an unofficial R package that enables basic interaction with Climacell's API. The functions within this package are tested against the [CORE data layers](https://docs.climacell.co/reference/data-layers-core). Using the functions within this package require a valid API key.
 
 More information about the Climacell API can be found on their [docs](https://docs.climacell.co/reference/api-overview) page.
