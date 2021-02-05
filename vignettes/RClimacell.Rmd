@@ -79,7 +79,7 @@ Consult the Climacell API [documentation](https://docs.climacell.co/reference/da
 
 ### Temperature
 
-```{r}
+```r
 library(RClimacell)
 library(dplyr)
 library(lubridate)
@@ -93,11 +93,19 @@ climacell_temperature(lat = 41.71530861778755,
                       start_time = st,
                       end_time = et) %>%
   dplyr::glimpse()
+
+#> Rows: 6
+#> Columns: 5
+#> $ start_time  <dttm> 2021-02-05 12:00:00, 2021-02-06 12:00:00, 2021-02-07 12:00:00, 2021-02-08 12:00:00, 2021-02-09 12:00:0…
+#> $ temp_c      <dbl> -7.00, -13.20, -17.70, -16.31, -15.59, -14.44
+#> $ temp_feel_c <dbl> -14.61, -20.54, -25.70, -25.11, -20.03, -17.36
+#> $ dewpoint    <dbl> -12.21, -17.60, -21.97, -19.47, -18.61, -17.80
+#> $ humidity    <dbl> 78.37, 79.06, 76.37, 94.21, 90.15, 88.55
 ```
 
 ### Wind
 
-```{r}
+```r
 library(RClimacell)
 library(dplyr)
 library(lubridate)
@@ -111,11 +119,18 @@ climacell_wind(lat = 41.71530861778755,
                start_time = st,
                end_time = et) %>%
   dplyr::glimpse()
+
+#> Rows: 6
+#> Columns: 4
+#> $ start_time     <dttm> 2021-02-05 12:00:00, 2021-02-06 12:00:00, 2021-02-07 12:00:00, 2021-02-08 12:00:00, 2021-02-09 12:0…
+#> $ wind_speed     <dbl> 7.26, 4.56, 4.44, 5.25, 3.67, 2.09
+#> $ wind_gust      <dbl> 11.88, 9.91, 6.44, 7.33, 4.70, 2.28
+#> $ wind_direction <dbl> 254.85, 177.01, 55.58, 128.68, 280.36, 77.19
 ```
 
 ### Precipitation
 
-```{r}
+```r
 library(RClimacell)
 library(dplyr)
 library(lubridate)
@@ -129,5 +144,21 @@ climacell_precip(lat = 41.71530861778755,
                  start_time = st,
                  end_time = et) %>%
   dplyr::glimpse()
+  
+#> Rows: 5
+#> Columns: 13
+#> $ start_time                <dttm> 2021-02-05 12:00:00, 2021-02-06 12:00:00, 2021-02-07 12:00:00, 2021-02-08 12:00:00, 2021…
+#> $ precipitation_intensity   <dbl> 0.0000, 0.3922, 0.5828, 0.2734, 0.0000
+#> $ precipitation_probability <dbl> 0, 50, 25, 15, 0
+#> $ precipitation_type_code   <dbl> 2, 2, 2, 2, 2
+#> $ precipitation_type_desc   <chr> "Snow", "Snow", "Snow", "Snow", "Snow"
+#> $ visibility                <dbl> 14.81, 16.00, 16.00, 24.14, 24.14
+#> $ pressure_surface_level    <dbl> 980.73, 990.21, 993.32, 993.83, 995.58
+#> $ pressure_sea_level        <dbl> 1011.14, 1016.76, 1027.34, 1027.21, 1032.76
+#> $ cloud_cover               <dbl> 100.00, 100.00, 100.00, 100.00, 61.58
+#> $ cloud_base                <dbl> 5.78, 3.92, 3.92, 4.82, 0.00
+#> $ cloud_ceiling             <dbl> 6.17, 6.17, 3.92, 5.18, 0.00
+#> $ weather_code              <dbl> 1102, 5100, 5100, 5100, 1101
+#> $ weather_desc              <chr> "Mostly Cloudy", "Light Snow", "Light Snow", "Light Snow", "Partly Cloudy"
 ```
 
