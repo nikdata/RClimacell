@@ -47,7 +47,7 @@ climacell_temperature(api_key = Sys.getenv("CLIMACELL_API"),
                       long = -87.636011,
                       timestep = '1d',
                       start_time = Sys.time(),
-                      end_time = Sys.time() + lubridate::days(7))
+                      end_time = Sys.time() + lubridate::days(3))
 
 ```
 
@@ -55,12 +55,23 @@ climacell_temperature(api_key = Sys.getenv("CLIMACELL_API"),
 ```{r wind_example}
 library(RClimacell)
 climacell_wind(api_key = Sys.getenv("CLIMACELL_API"),
-                      lat = 41.878685,
-                      long = -87.636011,
-                      timestep = '1d',
-                      start_time = Sys.time(),
-                      end_time = Sys.time() + lubridate::days(7))
+               lat = 41.878685,
+               long = -87.636011,
+               timestep = '1d',
+               start_time = Sys.time(),
+               end_time = Sys.time() + lubridate::days(3))
+```
+
+## Precipitation
+```{r}
+library(RClimacell)
+climacell_precip(api_key = Sys.getenv("CLIMACELL_API"),
+                 lat = 41.878685,
+                 long = -87.636011,
+                 timestep = '1d',
+                 start_time = Sys.time(),
+                 end_time = Sys.time() + lubridate::days(3))
 ```
 
 
-See the vignette for more information.
+See the [vignette](https://nikdata.github.io/RClimacell/) for more information.
