@@ -22,13 +22,9 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/nikdata/RClimacell/workflows/R-CMD-check/badge.svg)](https://github.com/nikdata/RClimacell/actions)
 <!-- badges: end -->
 
-The {RClimacell} package is an unofficial R package that enables basic interaction with [Climacell's](https://www.climacell.co) API. The functions within this package are tested against the [CORE data layers](https://docs.climacell.co/reference/data-layers-core). Using the functions within this package require a valid API key.
+The {RClimacell} package is an **unofficial** R package that enables basic interaction with [Climacell's](https://www.climacell.co) API using the [Timeline Interface](https://docs.climacell.co/reference/timeline-overview). The functions within this package are tested against some of the [CORE data layers](https://docs.climacell.co/reference/data-layers-core). 
 
-**WIP**
-
-This package is still under development. Please use with caution. Functions have not been fully tested.
-
-**THIS IS NOT AN OFFICIAL CLIMACELL PACKAGE!**
+Please note that using the functions within this package **require** a valid API key.
 
 More information about the Climacell API can be found on their [docs](https://docs.climacell.co/reference/api-overview) page.
 
@@ -67,14 +63,4 @@ climacell_wind(api_key = Sys.getenv("CLIMACELL_API"),
 ```
 
 
-## CAUTION
-
-* The free API has a limit of 1000 calls per day for CORE data layers
-* The free API has a limit of 100 calls per day for PREMIUM data layers (out of scope for this package at this time)
-
-
-## Limitations
-
-* Does not allow for PUT requests
-* I don't have the funds to get a more premium API account enabling for richer weather data. Therefore, I am limiting this package (for now) to the CORE data layers and focusing on GET.
-* PUT is only needed if you want to modify the settings on your Climacell API account from what I can gather.
+See the vignette for more information.

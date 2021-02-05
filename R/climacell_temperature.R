@@ -1,14 +1,16 @@
 #' Temperature Readings from Climacell
 #'
-#' @description \code{climacell_temperature} will call the Climacell API and return temperature related attributes such as temperature, temperatureApparent (i.e., wind chill or real feel temperature), dew point, and humidity. All values are in metric and the timestamps returned by the API are always in UTC. These are not converted to the local machine's timezone.
+#' \code{climacell_temperature} returns a tibble that consists of temperature related variables (returned values are in metric units) using the Climacell API. These variables consist of temperature, a "feels like" temperature, dewpoint, and humidity.
+#'
+#' @description This function will make a call to the Climacell API and retrieve temperature related variables.
 #'
 #'
-#' @param api_key a 32 character string that represents the private API key for accessing the Climacell API. If missing, the function attempts to call on the environment variable called "CLIMACELL_API".
+#' @param api_key character string representing the private API key. Provided by user or loaded automatically from environment variable (environment variable must be called "CLIMACELL_API")
 #' @param lat a numeric value (or a string that can be coerced to numeric) representing the latitude of the location
 #' @param long a numeric value (or a string that can be coerced to numeric) representing the longitude of the location
-#' @param timestep a 'step' value for the time. Valid values are (choose one): c('1d', '1h', '30m','15m','5m','1m','current')
-#' @param start_time the start date and time of the query in \href{https://en.wikipedia.org/wiki/ISO_8601}{ISO8601} format. Must include timezone. Valid syntax: YYYY-MM-DDTHH:MM:SS-HH:MM. This value cannot be more than 6 hours prior to the current local time. This argument is OPTIONAL if timestep is 'current'.
-#' @param end_time the end date and time of the query in \href{https://en.wikipedia.org/wiki/ISO_8601}{ISO8601} format. Must include timezone. Valid syntax: YYYY-MM-DDTHH:MM:SS-HH:MM. The maximum end date/time depends on the timestep value chosen. The Climacell API will only return the maximum allowable results if the end_time is beyond the API limits. This argument is OPTIONAL if you do not wish to 'narrow' your end results.
+#' @param timestep a 'step' value for the time. Choose one of the following valid values: c('1d', '1h', '30m','15m','5m','1m','current')
+#' @param start_time the start date and time of the query in \href{https://en.wikipedia.org/wiki/ISO_8601}{ISO8601} format. This value cannot be more than 6 hours prior to the current local time. OPTIONAL if timestep is 'current'.
+#' @param end_time the end date and time of the query in \href{https://en.wikipedia.org/wiki/ISO_8601}{ISO8601} format. The maximum end date/time depends on the timestep value chosen (see vignette for more information). OPTIONAL if timestep is 'current' or you wish to get the maximum results possible.
 #'
 #' @return a tibble
 #' @export
@@ -16,6 +18,7 @@
 #' @import dplyr
 #' @import tibble
 #' @import httr
+#' @import parsedate
 #'
 #' @importFrom stringr str_detect
 #' @importFrom magrittr `%>%`
@@ -33,10 +36,10 @@ climacell_temperature <- function(api_key, lat, long, timestep, start_time=NULL,
 
   # check for missig key or empty environment variable
   if(missing(api_key) & Sys.getenv('CLIMACELL_API') == '') {
-    stop("No API key provided. Please provide valid API key.")
+    stop("No API key provided nor default CLIMACELL_API environment variable found.\nPlease provide valid API key.")
   }
 
-  # basic way of assigning enviornment variable that may not exist
+  # basic way of assigning environment variable that may not exist
   api_key <- Sys.getenv('CLIMACELL_API')
 
   # ensure API key is 32 characters long
@@ -90,12 +93,16 @@ climacell_temperature <- function(api_key, lat, long, timestep, start_time=NULL,
   if(timestep != 'current'){
     if(is.na(parsedate::parse_iso_8601(start_time))) {
       stop("Start time value is not in ISO 8601 format!")
+    } else {
+      start_time <- parsedate::format_iso_8601(start_time)
     }
   }
 
   if(timestep != 'current') {
     if(is.na(parsedate::parse_iso_8601(end_time))) {
       stop("End time value is not in ISO 8601 format!")
+    } else {
+      end_time <- parsedate::format_iso_8601(end_time)
     }
   }
 
@@ -198,7 +205,7 @@ climacell_temperature <- function(api_key, lat, long, timestep, start_time=NULL,
       temp_c = as.numeric(.data$temp_c),
       temp_feel_c = as.numeric(.data$temp_feel_c),
       dewpoint = as.numeric(.data$dewpoint),
-      humidty = as.numeric(.data$humidity)
+      humidity = as.numeric(.data$humidity)
     )
 
   return(cln_out)

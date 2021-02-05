@@ -1,6 +1,6 @@
 Package: RClimacell
 Title: Functions to leverage the Climacell API
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     person(given = "Nikhil",
            family = "Agarwal",
@@ -23,3 +23,7 @@ Imports:
     lubridate (>= 1.7.9.2),
     rlang (>= 0.4.10),
     parsedate (>= 1.2.0)
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

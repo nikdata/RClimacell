@@ -1,8 +1,8 @@
-#' Wind Readings from Climacell
+#' Precipitation Readings from Climacell
 #'
-#' \code{climacell_wind} returns a tibble that consists of wind related variables (returned values are in metric units) using the Climacell API. These variables consist of wind speed, wind gust, and wind direction.
+#' \code{climacell_precip} returns a tibble that consists of precipitation related variables (returned values are in metric units) using the Climacell API. These variables consist of precipitation intensity, precipitation probability, precipitation description, visibility, surface & sea level pressure, cloud cover & ceiling, and a weather description.
 #'
-#' @description This function will make a call to the Climacell API and retrieve wind related variables.
+#' @description This function will make a call to the Climacell API and retrieve precipitation related (including cloud cover & pressure) values.
 #'
 #' @param api_key character string representing the private API key. Provided by user or loaded automatically from environment variable (environment variable must be called "CLIMACELL_API")
 #' @param lat a numeric value (or a string that can be coerced to numeric) representing the latitude of the location
@@ -25,14 +25,39 @@
 #'
 #' @examples
 #' \dontrun{
-#' climacell_wind(
+#' climacell_precip(
 #'   api_key = Sys.getenv('CLIMACELL_API'),
 #'   lat = 0,
 #'   long = 0,
 #'   timestep = 'current')
 #' }
 #'
-climacell_wind <- function(api_key, lat, long, timestep, start_time=NULL, end_time=NULL) {
+climacell_precip <- function(api_key, lat, long, timestep, start_time=NULL, end_time=NULL) {
+
+  # define table for precipitation_type codes
+  precip_type_dict <- tibble::tibble(precipitation_type_code = c(0,1,2,3,4),
+                                     precipitation_type_desc = c(NA,'Rain', 'Snow', 'Freezing Rain', 'Ice'))
+
+  # define table for weather_code codes
+  weather_code_dict <- tibble::tibble(weather_code = c(   0L, 1000L, 1001L,
+                                                       1100L, 1101L, 1102L,
+                                                       2000L, 2100L, 3000L,
+                                                       3001L, 3002L, 4000L,
+                                                       4001L, 4200L, 4201L,
+                                                       5000L, 5001L, 5100L,
+                                                       5101L, 6000L, 6001L,
+                                                       6200L, 6201L, 7000L,
+                                                       7101L, 7102L, 8000),
+                                      weather_desc = c('Unknown', 'Clear', 'Cloudy',
+                                                       'Mostly Clear', 'Partly Cloudy', 'Mostly Cloudy',
+                                                       'Fog', 'Light Fog', 'Light Wind',
+                                                       'Wind', 'Strong Wind', 'Drizzle',
+                                                       'Rain', 'Light Rain', 'Heavy Rain',
+                                                       'Snow', 'Flurries', 'Light Snow',
+                                                       'Heavy Snow', 'Freezing Drizzle', 'Freezing Rain',
+                                                       'Light Freezing Rain', 'Heavy Freezing Rain', 'Ice Pellets',
+                                                       'Heavy Ice Pellets', 'Light Ice Pellets', 'Thunderstorm')
+                                      )
 
   # check for missig key or empty environment variable
   if(missing(api_key) & Sys.getenv('CLIMACELL_API') == '') {
@@ -152,15 +177,22 @@ climacell_wind <- function(api_key, lat, long, timestep, start_time=NULL, end_ti
   result <- httr::content(
     httr::GET(
       url = 'https://data.climacell.co/v4/timelines',
-      httr::add_headers('apikey'= api_key),
+      httr::add_headers('apikey'= '804rce5PoZ1HGkPEO6VFIfGGXl9RASEa'),
       httr::add_headers('content-type:' = 'application/json'),
-      query = list(location = latlong,
-                   fields = 'windSpeed',
-                   fields = 'windDirection',
-                   fields = 'windGust',
-                   timesteps=timestep,
-                   startTime = start_time,
-                   endTime = end_time
+      query = list(location = '41.71530861778755, -93.61438914464473',
+                   fields = 'precipitationIntensity',
+                   fields = 'precipitationProbability',
+                   fields = 'precipitationType',
+                   fields = 'visibility',
+                   fields = 'pressureSurfaceLevel',
+                   fields = 'pressureSeaLevel',
+                   fields = 'cloudCover',
+                   fields = 'cloudBase',
+                   fields = 'cloudCeiling',
+                   fields = 'weatherCode',
+                   timesteps='1d',
+                   startTime = parsedate::format_iso_8601(Sys.time()),
+                   endTime = parsedate::format_iso_8601(Sys.Date() + lubridate::days(5))
       )
     )
   )
@@ -178,29 +210,81 @@ climacell_wind <- function(api_key, lat, long, timestep, start_time=NULL, end_ti
       dplyr::filter(stringr::str_detect(pattern = 'startTime', string = .data$name)) %>%
       dplyr::select(.data$value) %>%
       dplyr::pull(),
-    wind_speed = cln_result %>%
-      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.windSpeed', string = .data$name)) %>%
+    precipitation_intensity = cln_result %>%
+      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.precipitationIntensity', string = .data$name)) %>%
       dplyr::select(.data$value) %>%
       dplyr::pull(),
-    wind_gust = cln_result %>%
-      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.windGust', string = .data$name)) %>%
+    precipitation_probability = cln_result %>%
+      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.precipitationProbability', string = .data$name)) %>%
       dplyr::select(.data$value) %>%
       dplyr::pull(),
-    wind_direction = cln_result %>%
-      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.windDirection', string = .data$name)) %>%
+    precipitation_type_code = cln_result %>%
+      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.precipitationType', string = .data$name)) %>%
+      dplyr::select(.data$value) %>%
+      dplyr::pull(),
+    visibility = cln_result %>%
+      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.visibility', string = .data$name)) %>%
+      dplyr::select(.data$value) %>%
+      dplyr::pull(),
+    pressure_surface_level = cln_result %>%
+      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.pressureSurfaceLevel', string = .data$name)) %>%
+      dplyr::select(.data$value) %>%
+      dplyr::pull(),
+    pressure_sea_level = cln_result %>%
+      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.pressureSeaLevel', string = .data$name)) %>%
+      dplyr::select(.data$value) %>%
+      dplyr::pull(),
+    cloud_cover = cln_result %>%
+      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.cloudCover', string = .data$name)) %>%
+      dplyr::select(.data$value) %>%
+      dplyr::pull(),
+    cloud_base = cln_result %>%
+      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.cloudBase', string = .data$name)) %>%
+      dplyr::select(.data$value) %>%
+      dplyr::pull(),
+    cloud_ceiling = cln_result %>%
+      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.cloudCeiling', string = .data$name)) %>%
+      dplyr::select(.data$value) %>%
+      dplyr::pull(),
+    weather_code = cln_result %>%
+      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.weatherCode', string = .data$name)) %>%
       dplyr::select(.data$value) %>%
       dplyr::pull()
   )
 
   # change data types
   cln_out <- cln_out %>%
-    mutate(
+    dplyr::mutate(
       start_time = lubridate::ymd_hms(.data$start_time, tz = 'UTC'),
-      wind_speed = as.numeric(.data$wind_speed),
-      wind_gust = as.numeric(.data$wind_gust),
-      wind_direction = as.numeric(.data$wind_direction)
+      precipitation_intensity = as.numeric(.data$precipitation_intensity),
+      precipitation_probability = as.numeric(.data$precipitation_probability),
+      precipitation_type_code = as.integer(.data$precipitation_type_code),
+      visibility = as.numeric(.data$visibility),
+      pressure_surface_level = as.numeric(.data$pressure_surface_level),
+      pressure_sea_level = as.numeric(.data$pressure_sea_level),
+      cloud_cover = as.numeric(.data$cloud_cover),
+      cloud_base = as.numeric(.data$cloud_base),
+      cloud_ceiling = as.numeric(.data$cloud_ceiling),
+      weather_code = as.integer(.data$weather_code)
     )
 
-  return(cln_out)
+  # combine the dictionary values and rearrange columns
+  cln_out <- cln_out %>%
+    dplyr::left_join(precip_type_dict, by = c('precipitation_type_code' = 'precipitation_type_code')) %>%
+    dplyr::left_join(weather_code_dict, by = c('weather_code' = 'weather_code')) %>%
+    dplyr::select(.data$start_time,
+                  .data$precipitation_intensity,
+                  .data$precipitation_probability,
+                  .data$precipitation_type_code,
+                  .data$precipitation_type_desc,
+                  .data$visibility,
+                  .data$pressure_surface_level,
+                  .data$pressure_sea_level,
+                  .data$cloud_cover,
+                  .data$cloud_base,
+                  .data$cloud_ceiling,
+                  .data$weather_code,
+                  .data$weather_desc)
 
+  return(cln_out)
 }

@@ -1,0 +1,133 @@
+---
+title: "RClimacell"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{RClimacell}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE,
+  fig.height = 8,
+  fig.width = 5
+)
+```
+
+The {RClimacell} R package provides a high level wrapper around the Climacell version 4 API using the [Timeline Interface](https://docs.climacell.co/reference/timeline-overview). Currently, the package only provides access to some of the [CORE](https://docs.climacell.co/reference/data-layers-core) layers provided by Climacell. This is due to my inability to subscribe to the premium tier of the API.
+
+Note that this package requires the user to have an API key as it is necessary to access the Climacell API and obtain results.
+
+## Functions
+
+The {RClimacell} package consists of three functions:
+
+- `climacell_temperature`: obtains temperature related variables
+- `climacell_wind`: obtains wind related variables
+- `climacell_precip`: obtains precipitation related variables
+
+## Climacell API CORE Layers
+
+The following table summarizes which CORE layers are available in the current package version:
+
+|         API Field        | {RClimacell} Equivalent Name | Implemented in package? |     Part of Function      |
+|:------------------------:|:----------------------------:|:-----------------------:|:-------------------------:|
+| temperature              | temp_c                       | yes                     | `climacell_temperature()` |
+| temperatureApparent      | temp_feel_c                  | yes                     | `climacell_temperature()` |
+| dewPoint                 | dewpoint                     | yes                     | `climacell_temperature()` |
+| humidity                 | humidity                     | yes                     | `climacell_temperature()` |
+| windSpeed                | wind_speed                   | yes                     | `climacell_wind()`        |
+| windDirection            | wind_direction               | yes                     | `climacell_wind()`        |
+| windGust                 | wind_gust                    | yes                     | `climacell_wind()`        |
+| pressureSurfaceLevel     | pressure_surface_level       | yes                     | `climacell_precip()`      |
+| pressureSeaLevel         | pressure_sea_level           | yes                     | `climacell_precip()`      |
+| precipitationIntensity   | precipitation_intensity      | yes                     | `climacell_precip()`      |
+| precipitationProbability | precipitation_probability    | yes                     | `climacell_precip()`      |
+| precipitationType        | precipitation_type           | yes                     | `climacell_precip()`      |
+| sunriseTime              | n/a                          | NO                      | n/a                       |
+| sunsetTime               | n/a                          | NO                      | n/a                       |
+| solarGHI                 | n/a                          | NO                      | n/a                       |
+| visibility               | visibility                   | yes                     | `climacell_precip()`      |
+| cloudCover               | cloud_cover                  | yes                     | `climacell_precip()`      |
+| cloudBase                | cloud_base                   | yes                     | `climacell_precip()`      |
+| cloudCeiling             | cloud_ceiling                | yes                     | n/a                       |
+| moonPhase                | n/a                          | NO                      | n/a                       |
+| weatherCode              | weather_code                 | yes                     | `climacell_precip()`      |
+
+
+## Limitations
+
+### API Call Limits
+
+The Climacell API has certain limitations based on the subscription tier. This package is tested using the free tier. Due to this limitation, the author is only able to provide access to the CORE layers. Note that the free tier allows for 1,000 calls per day to CORE layers.
+
+### Date/Time Range Limits
+
+Depending on the `timestep` value chosen, there are upper limits to how far into the future you can get results for. Typically, with the free API, you are not able to obtain results prior to 6 hours from the current time. These limits can be found [here](https://docs.climacell.co/reference/data-layers-overview).
+
+### Units
+
+This package leverage version 4 of the Climacell API. Hence, it can be assumed that all units are in metric and all times are in UTC using the [ISO 8601 standard](https://en.wikipedia.org/wiki/ISO_8601). The user is advised to strongly ensure that all times entered strictly adhere to the ISO 8601 standard. It is also encouraged that the user input all times in UTC. Note that returned times are always in UTC. This is due to the API - not the R package.
+
+## Data Structure
+
+Consult the Climacell API [documentation](https://docs.climacell.co/reference/data-layers-core) on CORE layers to understand the unit labels for each field. Where possible, the value types have been adjusted to either integer, numeric, date-time, or character.
+
+### Temperature
+
+```{r}
+library(RClimacell)
+library(dplyr)
+library(lubridate)
+
+st <- lubridate::now()
+et <- st + lubridate::days(5)
+
+climacell_temperature(lat = 41.71530861778755,
+                      long = -93.61438914464473,
+                      timestep = '1d',
+                      start_time = st,
+                      end_time = et) %>%
+  dplyr::glimpse()
+```
+
+### Wind
+
+```{r}
+library(RClimacell)
+library(dplyr)
+library(lubridate)
+
+st <- lubridate::now()
+et <- st + lubridate::days(5)
+
+climacell_wind(lat = 41.71530861778755,
+               long = -93.61438914464473,
+               timestep = '1d',
+               start_time = st,
+               end_time = et) %>%
+  dplyr::glimpse()
+```
+
+### Precipitation
+
+```{r}
+library(RClimacell)
+library(dplyr)
+library(lubridate)
+
+st <- lubridate::now()
+et <- st + lubridate::days(5)
+
+climacell_precip(lat = 41.71530861778755,
+                 long = -93.61438914464473,
+                 timestep = '1d',
+                 start_time = st,
+                 end_time = et) %>%
+  dplyr::glimpse()
+```
+

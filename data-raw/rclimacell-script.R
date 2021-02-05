@@ -1,6 +1,8 @@
 library(httr)
 library(dplyr)
 
+`%>%` <- magrittr::`%>%`
+
 
 result <- httr::content(
   httr::GET(
@@ -80,26 +82,6 @@ result2 <- httr::content(
 )
 
 
-
-
-
-httr::content(
-  httr::GET(
-    url = 'https://data.climacell.co/v4/timelines',
-    httr::add_headers('apikey'= '804rce5PoZ1HGkPEO6VFIfGGXl9RASEa'),
-    httr::add_headers('content-type:' = 'application/json'),
-    query = list(location = '41.71530861778755, -93.61438914464473',
-                 fields = 'temperature',
-                 fields = 'temperatureApparent',
-                 fields = 'dewPoint',
-                 fields = 'humidity',
-                 timesteps='1d',
-                 startTime = parsedate::format_iso_8601(Sys.time()),
-                 endTime = parsedate::format_iso_8601(Sys.Date() + lubridate::days(3))
-    )
-  )
-)
-
 tidyresult2 <- tibble::enframe(unlist(result2)) %>%
   dplyr::mutate(
     name = gsub(pattern = 'data.timelines.', replacement = '', x = name)
@@ -112,6 +94,102 @@ tibble::tibble(
   wind_gust = tidyresult2 %>% dplyr::filter(stringr::str_detect(pattern = 'intervals.values.windGust', string = name)) %>% dplyr::select(value) %>% dplyr::pull(),
   wind_direction = tidyresult2 %>% dplyr::filter(stringr::str_detect(pattern = 'intervals.values.windDirection', string = name)) %>% dplyr::select(value) %>% dplyr::pull()
 )
+
+
+results3 <- httr::content(
+  httr::GET(
+    url = 'https://data.climacell.co/v4/timelines',
+    httr::add_headers('apikey'= '804rce5PoZ1HGkPEO6VFIfGGXl9RASEa'),
+    httr::add_headers('content-type:' = 'application/json'),
+    query = list(location = '41.71530861778755, -93.61438914464473',
+                 fields = 'precipitationIntensity',
+                 fields = 'precipitationProbability',
+                 fields = 'precipitationType',
+                 fields = 'visibility',
+                 fields = 'pressureSurfaceLevel',
+                 fields = 'pressureSeaLevel',
+                 fields = 'cloudCover',
+                 fields = 'cloudBase',
+                 fields = 'cloudCeiling',
+                 fields = 'weatherCode',
+                 timesteps='1d',
+                 startTime = parsedate::format_iso_8601(Sys.time()),
+                 endTime = parsedate::format_iso_8601(Sys.Date() + lubridate::days(5))
+    )
+  )
+)
+
+tidyresult3 <- tibble::enframe(unlist(results3)) %>%
+  dplyr::mutate(
+    name = gsub(pattern = 'data.timelines.', replacement = '', x = name)
+  ) %>%
+  dplyr::filter(stringr::str_detect(pattern = 'intervals', string = name))
+
+cln3 <- tibble::tibble(
+  start_time = tidyresult3 %>%
+    dplyr::filter(stringr::str_detect(pattern = 'startTime', string = name)) %>%
+    dplyr::select(value) %>%
+    dplyr::pull(),
+  precipitation_intensity = tidyresult3 %>%
+    dplyr::filter(stringr::str_detect(pattern = 'intervals.values.precipitationIntensity', string = name)) %>%
+    dplyr::select(value) %>%
+    dplyr::pull(),
+  precipitation_probability = tidyresult3 %>%
+    dplyr::filter(stringr::str_detect(pattern = 'intervals.values.precipitationProbability', string = name)) %>%
+    dplyr::select(value) %>%
+    dplyr::pull(),
+  precipitation_type_code = tidyresult3 %>%
+    dplyr::filter(stringr::str_detect(pattern = 'intervals.values.precipitationType', string = name)) %>%
+    dplyr::select(value) %>%
+    dplyr::pull(),
+  visibility = tidyresult3 %>%
+    dplyr::filter(stringr::str_detect(pattern = 'intervals.values.visibility', string = name)) %>%
+    dplyr::select(value) %>%
+    dplyr::pull(),
+  pressure_surface_level = tidyresult3 %>%
+    dplyr::filter(stringr::str_detect(pattern = 'intervals.values.pressureSurfaceLevel', string = name)) %>%
+    dplyr::select(value) %>%
+    dplyr::pull(),
+  pressure_sea_level = tidyresult3 %>%
+    dplyr::filter(stringr::str_detect(pattern = 'intervals.values.pressureSeaLevel', string = name)) %>%
+    dplyr::select(value) %>%
+    dplyr::pull(),
+  cloud_cover = tidyresult3 %>%
+    dplyr::filter(stringr::str_detect(pattern = 'intervals.values.cloudCover', string = name)) %>%
+    dplyr::select(value) %>%
+    dplyr::pull(),
+  cloud_base = tidyresult3 %>%
+    dplyr::filter(stringr::str_detect(pattern = 'intervals.values.cloudBase', string = name)) %>%
+    dplyr::select(value) %>%
+    dplyr::pull(),
+  cloud_ceiling = tidyresult3 %>%
+    dplyr::filter(stringr::str_detect(pattern = 'intervals.values.cloudCeiling', string = name)) %>%
+    dplyr::select(value) %>%
+    dplyr::pull(),
+  weather_code = tidyresult3 %>%
+    dplyr::filter(stringr::str_detect(pattern = 'intervals.values.weatherCode', string = name)) %>%
+    dplyr::select(value) %>%
+    dplyr::pull()
+)
+
+cln3 %>%
+  dplyr::mutate(
+    start_time = lubridate::ymd_hms(start_time, tz = 'UTC'),
+    precipitation_intensity = as.numeric(precipitation_intensity),
+    precipitation_probability = as.numeric(precipitation_probability),
+    precipitation_type_code = as.integer(precipitation_type_code),
+    visibility = as.numeric(visibility),
+    pressure_surface_level = as.numeric(pressure_surface_level),
+    pressure_sea_level = as.numeric(pressure_sea_level),
+    cloud_cover = as.numeric(cloud_cover),
+    cloud_base = as.numeric(cloud_base),
+    cloud_ceiling = as.numeric(cloud_ceiling),
+    weather_code = as.integer(weather_code)
+  ) %>%
+  dplyr::left_join(precip_type_dict, by = c('precipitation_type_code' = 'precipitation_type_code')) %>%
+  dplyr::left_join(weather_code_dict, by = c('weather_code' = 'weather_code')) %>%
+  dplyr::glimpse()
+
 
 
 
@@ -159,11 +237,21 @@ RClimacell::climacell_temperature(lat = 41.71530861778755,
                                   long = -93.61438914464473,
                                   timestep = '1d',
                                   start_time = Sys.time(),
-                                  end_time = Sys.time() + lubridate::days(7))
+                                  end_time = Sys.time() + lubridate::days(7)) %>%
+  dplyr::glimpse()
 
 # scenario 8: all correct wind
 RClimacell::climacell_wind(lat = 41.71530861778755,
                                   long = -93.61438914464473,
                                   timestep = '1d',
                                   start_time = Sys.time(),
-                                  end_time = Sys.time() + lubridate::days(7))
+                                  end_time = Sys.time() + lubridate::days(7)) %>%
+  dplyr::glimpse()
+
+# scenario 9: all correct precip
+RClimacell::climacell_precip(lat = 41.71530861778755,
+                           long = -93.61438914464473,
+                           timestep = '1d',
+                           start_time = Sys.time(),
+                           end_time = Sys.time() + lubridate::days(7)) %>%
+  dplyr::glimpse()
