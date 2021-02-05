@@ -1,7 +1,5 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-# RClimacell
+# RClimacell <a href='https://nikdata.github.io/RClimacell/'><img src='man/figures/rclimacell-hex.png' align="right" width="150" height="150" />
 
 <!-- badges: start -->
 
@@ -52,10 +50,10 @@ climacell_temperature(api_key = Sys.getenv("CLIMACELL_API"),
 #> # A tibble: 4 x 5
 #>   start_time          temp_c temp_feel_c dewpoint humidity
 #>   <dttm>               <dbl>       <dbl>    <dbl>    <dbl>
-#> 1 2021-02-05 12:00:00  -8.86       -17.9    -13.2     75.1
-#> 2 2021-02-06 12:00:00 -10.4        -16.7    -14.8     79.3
-#> 3 2021-02-07 12:00:00 -13.9        -18.2    -17.9     76.4
-#> 4 2021-02-08 12:00:00 -12.3        -15.8    -14.5     83.8
+#> 1 2021-02-05 12:00:00 -10.6       -18.7     -14.7     73  
+#> 2 2021-02-06 12:00:00 -10.7       -17.9     -15.2     78.8
+#> 3 2021-02-07 12:00:00 -13.9       -19.6     -19.0     73.9
+#> 4 2021-02-08 12:00:00  -9.68       -9.68    -13.2     76.9
 ```
 
 ### Wind
@@ -71,10 +69,10 @@ climacell_wind(api_key = Sys.getenv("CLIMACELL_API"),
 #> # A tibble: 4 x 4
 #>   start_time          wind_speed wind_gust wind_direction
 #>   <dttm>                   <dbl>     <dbl>          <dbl>
-#> 1 2021-02-05 12:00:00       8.53     17.1            243.
-#> 2 2021-02-06 12:00:00       7.01      9.83           274.
-#> 3 2021-02-07 12:00:00       6.57      8.97           301.
-#> 4 2021-02-08 12:00:00       3.29      4.72           300.
+#> 1 2021-02-05 12:00:00       8.53     17.7            256.
+#> 2 2021-02-06 12:00:00       7.12     12.4            275.
+#> 3 2021-02-07 12:00:00       6.81      9.28           302.
+#> 4 2021-02-08 12:00:00       3.31      4.75           253.
 ```
 
 ## Precipitation
@@ -90,10 +88,10 @@ climacell_precip(api_key = Sys.getenv("CLIMACELL_API"),
 #> # A tibble: 5 x 13
 #>   start_time          precipitation_i… precipitation_p… precipitation_t…
 #>   <dttm>                         <dbl>            <dbl>            <dbl>
-#> 1 2021-02-05 12:00:00            0                    1                2
-#> 2 2021-02-06 12:00:00            0.585               55                2
-#> 3 2021-02-07 12:00:00            0.364               25                2
-#> 4 2021-02-08 12:00:00            0.490               55                2
+#> 1 2021-02-05 12:00:00            0                    0                2
+#> 2 2021-02-06 12:00:00            1.08               100                2
+#> 3 2021-02-07 12:00:00            0.583               25                2
+#> 4 2021-02-08 12:00:00            0.273               15                2
 #> 5 2021-02-09 12:00:00            0                    0                2
 #> # … with 9 more variables: precipitation_type_desc <chr>, visibility <dbl>,
 #> #   pressure_surface_level <dbl>, pressure_sea_level <dbl>, cloud_cover <dbl>,
