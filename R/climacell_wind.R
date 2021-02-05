@@ -1,8 +1,5 @@
 #' Temperature Readings from Climacell
 #'
-#' @description \code{climacell_temperature} will call the Climacell API and return temperature related attributes such as temperature, temperatureApparent (i.e., wind chill or real feel temperature), dew point, and humidity. All values are in metric and the timestamps returned by the API are always in UTC. These are not converted to the local machine's timezone.
-#'
-#'
 #' @param api_key a 32 character string that represents the private API key for accessing the Climacell API. If missing, the function attempts to call on the environment variable called "CLIMACELL_API".
 #' @param lat a numeric value (or a string that can be coerced to numeric) representing the latitude of the location
 #' @param long a numeric value (or a string that can be coerced to numeric) representing the longitude of the location
@@ -21,15 +18,8 @@
 #' @importFrom magrittr `%>%`
 #' @importFrom rlang .data
 #'
-#' @examples
-#' \dontrun{
-#' climacell_temperature(
-#'   api_key = Sys.getenv('CLIMACELL_API'),
-#'   lat = 0,
-#'   long = 0,
-#'   timestep = 'current')
-#' }
-climacell_temperature <- function(api_key, lat, long, timestep, start_time=NULL, end_time=NULL) {
+#'
+climacell_wind <- function(api_key, lat, long, timestep, start_time=NULL, end_time=NULL) {
 
   # check for missig key or empty environment variable
   if(missing(api_key) & Sys.getenv('CLIMACELL_API') == '') {
@@ -148,10 +138,9 @@ climacell_temperature <- function(api_key, lat, long, timestep, start_time=NULL,
       httr::add_headers('apikey'= api_key),
       httr::add_headers('content-type:' = 'application/json'),
       query = list(location = latlong,
-                   fields = 'temperature',
-                   fields = 'temperatureApparent',
-                   fields = 'dewPoint',
-                   fields = 'humidity',
+                   fields = 'windSpeed',
+                   fields = 'windDirection',
+                   fields = 'windGust',
                    timesteps=timestep,
                    startTime = start_time,
                    endTime = end_time
@@ -163,8 +152,7 @@ climacell_temperature <- function(api_key, lat, long, timestep, start_time=NULL,
 
   cln_result <- tidy_result %>%
     dplyr::mutate(
-      name = gsub(pattern = 'data.timelines.', replacement = '', x = .data$name),
-      name = gsub(pattern = 'temperatureApparent', replacement = 'realFeel', x = .data$name)
+      name = gsub(pattern = 'data.timelines.', replacement = '', x = .data$name)
     ) %>%
     dplyr::filter(stringr::str_detect(pattern = 'intervals', string = .data$name))
 
@@ -173,20 +161,16 @@ climacell_temperature <- function(api_key, lat, long, timestep, start_time=NULL,
       dplyr::filter(stringr::str_detect(pattern = 'startTime', string = .data$name)) %>%
       dplyr::select(.data$value) %>%
       dplyr::pull(),
-    temp_c = cln_result %>%
-      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.temperature', string = .data$name)) %>%
+    wind_speed = cln_result %>%
+      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.windSpeed', string = .data$name)) %>%
       dplyr::select(.data$value) %>%
       dplyr::pull(),
-    temp_feel_c = cln_result %>%
-      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.realFeel', string = .data$name)) %>%
+    wind_gust = cln_result %>%
+      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.windGust', string = .data$name)) %>%
       dplyr::select(.data$value) %>%
       dplyr::pull(),
-    dewpoint = cln_result %>%
-      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.dewPoint', string = .data$name)) %>%
-      dplyr::select(.data$value) %>%
-      dplyr::pull(),
-    humidity = cln_result %>%
-      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.humidity', string = .data$name)) %>%
+    wind_direction = cln_result %>%
+      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.windDirection', string = .data$name)) %>%
       dplyr::select(.data$value) %>%
       dplyr::pull()
   )
@@ -195,10 +179,9 @@ climacell_temperature <- function(api_key, lat, long, timestep, start_time=NULL,
   cln_out <- cln_out %>%
     mutate(
       start_time = lubridate::ymd_hms(.data$start_time, tz = 'UTC'),
-      temp_c = as.numeric(.data$temp_c),
-      temp_feel_c = as.numeric(.data$temp_feel_c),
-      dewpoint = as.numeric(.data$dewpoint),
-      humidty = as.numeric(.data$humidity)
+      wind_speed = as.numeric(.data$wind_speed),
+      wind_gust = as.numeric(.data$wind_gust),
+      wind_direction = as.numeric(.data$wind_direction)
     )
 
   return(cln_out)
