@@ -7,9 +7,9 @@ Authors@R:
            role = c("aut", "cre"),
            email = "gitnik@niks.me",
            comment = c(ORCID = "0000-0003-1470-7472"))
-Description: Climacell is a weather platform that provides hyperlocal forecasts and weather 
+Description: `Climacell` is a weather platform that provides hyperlocal forecasts and weather 
     data. This package enables the user to query the CORE layers of the 
-    Timeline Interface of the Climacell v4 API. This package requires
+    `Timeline Interface` of the `Climacell` v4 API. This package requires
     a valid API key. See vignettes for instructions on use.
 License: MIT + file LICENSE
 Encoding: UTF-8
