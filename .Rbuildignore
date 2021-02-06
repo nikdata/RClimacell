@@ -11,3 +11,6 @@
 ^data-raw
 ^doc$
 ^Meta$
+^cran-comments.md$
+^CRAN-RELEASE$
+^man\figures\.afdesign$
