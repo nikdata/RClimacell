@@ -13,6 +13,6 @@ There were no ERRORs or WARNINGs.
 There were 2 NOTES:
 
 * New submission
-* Mis-spelled words: Climacell, Climacell's, RClimacell
+* Mis-spelled words: Climacell, Timeline
 
-The words Climacell and Climacell's refer to the weather API service Climacell (https://www.climacell.co) and the word RClimacell refers to the name of the package. These are not mis-spelled words.
+Climacell is the name of the company that provides the actual API. Timeline is part of their service name called Timeline Interface. Both words are not mis-spellings.
