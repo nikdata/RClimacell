@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="R Wrapper for the Climacell API">
-<meta property="og:description" content="Climacell is a weather platform that provides hyperlocal forecasts and weather 
+<meta property="og:description" content="Climacell is a weather platform that provides hyper-local forecasts and weather 
     data. This package enables the user to query the CORE layers of the 
     Timeline Interface of the Climacell v4 API. This package requires
     a valid API key. See vignettes for instructions on use.">
@@ -102,10 +102,10 @@
 <span class="co">#&gt; # A tibble: 4 x 5</span>
 <span class="co">#&gt;   start_time          temp_c temp_feel_c dewpoint humidity</span>
 <span class="co">#&gt;   &lt;dttm&gt;               &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 2021-02-05 12:00:00 -10.6       -18.7     -14.7     73  </span>
-<span class="co">#&gt; 2 2021-02-06 12:00:00 -10.7       -17.9     -15.2     78.8</span>
-<span class="co">#&gt; 3 2021-02-07 12:00:00 -13.9       -19.6     -19.0     73.9</span>
-<span class="co">#&gt; 4 2021-02-08 12:00:00  -9.68       -9.68    -13.2     76.9</span></code></pre></div>
+<span class="co">#&gt; 1 2021-02-06 12:00:00  -8.7       -15.3    -12.0      84.4</span>
+<span class="co">#&gt; 2 2021-02-07 12:00:00 -14.6       -20.9    -19.4      77.6</span>
+<span class="co">#&gt; 3 2021-02-08 12:00:00  -6.81       -9.92    -8.67     88.2</span>
+<span class="co">#&gt; 4 2021-02-09 12:00:00  -7.48      -15.3     -9.09     88.8</span></code></pre></div>
 </div>
 <div id="wind" class="section level3">
 <h3 class="hasAnchor">
@@ -121,10 +121,10 @@
 <span class="co">#&gt; # A tibble: 4 x 4</span>
 <span class="co">#&gt;   start_time          wind_speed wind_gust wind_direction</span>
 <span class="co">#&gt;   &lt;dttm&gt;                   &lt;dbl&gt;     &lt;dbl&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 2021-02-05 12:00:00       8.53     17.7            256.</span>
-<span class="co">#&gt; 2 2021-02-06 12:00:00       7.12     12.4            275.</span>
-<span class="co">#&gt; 3 2021-02-07 12:00:00       6.81      9.28           302.</span>
-<span class="co">#&gt; 4 2021-02-08 12:00:00       3.31      4.75           253.</span></code></pre></div>
+<span class="co">#&gt; 1 2021-02-06 12:00:00       7.08     10.8            279.</span>
+<span class="co">#&gt; 2 2021-02-07 12:00:00       6.45      8.92           287.</span>
+<span class="co">#&gt; 3 2021-02-08 12:00:00       6.51      8.92           172.</span>
+<span class="co">#&gt; 4 2021-02-09 12:00:00       9.24     12.5            335.</span></code></pre></div>
 </div>
 </div>
 <div id="precipitation" class="section level2">
@@ -141,11 +141,11 @@
 <span class="co">#&gt; # A tibble: 5 x 13</span>
 <span class="co">#&gt;   start_time          precipitation_i… precipitation_p… precipitation_t…</span>
 <span class="co">#&gt;   &lt;dttm&gt;                         &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 2021-02-05 12:00:00            0                    0                2</span>
-<span class="co">#&gt; 2 2021-02-06 12:00:00            1.08               100                2</span>
-<span class="co">#&gt; 3 2021-02-07 12:00:00            0.583               25                2</span>
-<span class="co">#&gt; 4 2021-02-08 12:00:00            0.273               15                2</span>
-<span class="co">#&gt; 5 2021-02-09 12:00:00            0                    0                2</span>
+<span class="co">#&gt; 1 2021-02-06 12:00:00           1.1                  90                2</span>
+<span class="co">#&gt; 2 2021-02-07 12:00:00           0.372                20                2</span>
+<span class="co">#&gt; 3 2021-02-08 12:00:00           0.197                25                2</span>
+<span class="co">#&gt; 4 2021-02-09 12:00:00           0                     0                2</span>
+<span class="co">#&gt; 5 2021-02-10 12:00:00           0.0663                0                2</span>
 <span class="co">#&gt; # … with 9 more variables: precipitation_type_desc &lt;chr&gt;, visibility &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   pressure_surface_level &lt;dbl&gt;, pressure_sea_level &lt;dbl&gt;, cloud_cover &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   cloud_base &lt;dbl&gt;, cloud_ceiling &lt;dbl&gt;, weather_code &lt;dbl&gt;,</span>
@@ -173,7 +173,7 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/figures/lifecycle-experimental.svg"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 <li><a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a></li>
 <li><a href="https://github.com/nikdata/RClimacell/commit/main"><img src="https://img.shields.io/github/last-commit/nikdata/RClimacell" alt="GitHub commit"></a></li>
 <li><a href="https://github.com/nikdata/RClimacell/actions"><img src="https://github.com/nikdata/RClimacell/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>

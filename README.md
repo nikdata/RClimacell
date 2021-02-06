@@ -4,7 +4,7 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/figures/lifecycle-experimental.svg)
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![GitHub
@@ -50,10 +50,10 @@ climacell_temperature(api_key = Sys.getenv("CLIMACELL_API"),
 #> # A tibble: 4 x 5
 #>   start_time          temp_c temp_feel_c dewpoint humidity
 #>   <dttm>               <dbl>       <dbl>    <dbl>    <dbl>
-#> 1 2021-02-05 12:00:00 -10.6       -18.7     -14.7     73  
-#> 2 2021-02-06 12:00:00 -10.7       -17.9     -15.2     78.8
-#> 3 2021-02-07 12:00:00 -13.9       -19.6     -19.0     73.9
-#> 4 2021-02-08 12:00:00  -9.68       -9.68    -13.2     76.9
+#> 1 2021-02-06 12:00:00  -8.7       -15.3    -12.0      84.4
+#> 2 2021-02-07 12:00:00 -14.6       -20.9    -19.4      77.6
+#> 3 2021-02-08 12:00:00  -6.81       -9.92    -8.67     88.2
+#> 4 2021-02-09 12:00:00  -7.48      -15.3     -9.09     88.8
 ```
 
 ### Wind
@@ -69,10 +69,10 @@ climacell_wind(api_key = Sys.getenv("CLIMACELL_API"),
 #> # A tibble: 4 x 4
 #>   start_time          wind_speed wind_gust wind_direction
 #>   <dttm>                   <dbl>     <dbl>          <dbl>
-#> 1 2021-02-05 12:00:00       8.53     17.7            256.
-#> 2 2021-02-06 12:00:00       7.12     12.4            275.
-#> 3 2021-02-07 12:00:00       6.81      9.28           302.
-#> 4 2021-02-08 12:00:00       3.31      4.75           253.
+#> 1 2021-02-06 12:00:00       7.08     10.8            279.
+#> 2 2021-02-07 12:00:00       6.45      8.92           287.
+#> 3 2021-02-08 12:00:00       6.51      8.92           172.
+#> 4 2021-02-09 12:00:00       9.24     12.5            335.
 ```
 
 ## Precipitation
@@ -88,11 +88,11 @@ climacell_precip(api_key = Sys.getenv("CLIMACELL_API"),
 #> # A tibble: 5 x 13
 #>   start_time          precipitation_i… precipitation_p… precipitation_t…
 #>   <dttm>                         <dbl>            <dbl>            <dbl>
-#> 1 2021-02-05 12:00:00            0                    0                2
-#> 2 2021-02-06 12:00:00            1.08               100                2
-#> 3 2021-02-07 12:00:00            0.583               25                2
-#> 4 2021-02-08 12:00:00            0.273               15                2
-#> 5 2021-02-09 12:00:00            0                    0                2
+#> 1 2021-02-06 12:00:00           1.1                  90                2
+#> 2 2021-02-07 12:00:00           0.372                20                2
+#> 3 2021-02-08 12:00:00           0.197                25                2
+#> 4 2021-02-09 12:00:00           0                     0                2
+#> 5 2021-02-10 12:00:00           0.0663                0                2
 #> # … with 9 more variables: precipitation_type_desc <chr>, visibility <dbl>,
 #> #   pressure_surface_level <dbl>, pressure_sea_level <dbl>, cloud_cover <dbl>,
 #> #   cloud_base <dbl>, cloud_ceiling <dbl>, weather_code <dbl>,
