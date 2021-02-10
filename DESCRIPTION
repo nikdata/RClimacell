@@ -1,5 +1,5 @@
 Package: RClimacell
-Title: R Wrapper for the Climacell API
+Title: R Wrapper for the 'Climacell' API
 Version: 0.1.0
 Authors@R: 
     person(given = "Nikhil",
@@ -7,10 +7,10 @@ Authors@R:
            role = c("aut", "cre"),
            email = "gitnik@niks.me",
            comment = c(ORCID = "0000-0003-1470-7472"))
-Description: Climacell is a weather platform that provides hyper-local forecasts and weather 
-    data. This package enables the user to query the CORE layers of the 
-    Timeline Interface of the Climacell v4 API. This package requires
-    a valid API key. See vignettes for instructions on use.
+Description: 'Climacell' is a weather platform that provides hyper-local forecasts and weather 
+    data. This package enables the user to query the core layers of the 
+    time line interface of the 'Climacell' v4 API <https://www.climacell.co/weather-api/>. 
+    This package requires a valid API key. See vignettes for instructions on use.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
