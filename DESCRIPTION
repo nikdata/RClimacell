@@ -1,6 +1,6 @@
 Package: RClimacell
 Title: R Wrapper for the 'Climacell' API
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     person(given = "Nikhil",
            family = "Agarwal",
@@ -24,7 +24,8 @@ Imports:
     httr (>= 1.4.2),
     lubridate (>= 1.7.9.2),
     rlang (>= 0.4.10),
-    parsedate (>= 1.2.0)
+    parsedate (>= 1.2.0),
+    tidyr (>= 1.1.2)
 Suggests: 
     knitr,
     rmarkdown
