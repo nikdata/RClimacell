@@ -179,7 +179,7 @@ climacell_precip <- function(api_key, lat, long, timestep, start_time=NULL, end_
       url = 'https://data.climacell.co/v4/timelines',
       httr::add_headers('apikey'= '804rce5PoZ1HGkPEO6VFIfGGXl9RASEa'),
       httr::add_headers('content-type:' = 'application/json'),
-      query = list(location = '41.71530861778755, -93.61438914464473',
+      query = list(location = latlong,
                    fields = 'precipitationIntensity',
                    fields = 'precipitationProbability',
                    fields = 'precipitationType',
@@ -190,7 +190,7 @@ climacell_precip <- function(api_key, lat, long, timestep, start_time=NULL, end_
                    fields = 'cloudBase',
                    fields = 'cloudCeiling',
                    fields = 'weatherCode',
-                   timesteps='1d',
+                   timesteps=timestep,
                    startTime = parsedate::format_iso_8601(Sys.time()),
                    endTime = parsedate::format_iso_8601(Sys.Date() + lubridate::days(5))
       )
@@ -205,6 +205,38 @@ climacell_precip <- function(api_key, lat, long, timestep, start_time=NULL, end_
     ) %>%
     dplyr::filter(stringr::str_detect(pattern = 'intervals', string = .data$name))
 
+  # let's get the cloud cover data out first (if any)
+  # cloud cover varies big time.
+  my_results <- cln_result %>%
+    dplyr::filter(stringr::str_detect(pattern = 'startTime', string = .data$name) | stringr::str_detect(pattern = 'cloud', string = .data$name))
+
+  my_results %>%
+    dplyr::filter(stringr::str_detect(pattern = 'startTime', string = .data$name)) %>%
+    dplyr::mutate(index = dplyr::row_number())
+
+  df_cloud <- my_results %>%
+    dplyr::left_join(
+      my_results %>%
+        dplyr::filter(stringr::str_detect(pattern = 'startTime', string = .data$name)) %>%
+        dplyr::mutate(index = dplyr::row_number()),
+      by = c('name','value')
+    ) %>%
+    dplyr::mutate(
+      name = gsub(pattern = 'intervals.', replacement = '', x = .data$name),
+      name = gsub(pattern = 'values.', replacement = '', x = .data$name),
+      name = gsub(pattern = 'startTime', replacement = 'start_time', x = .data$name),
+      name = gsub(pattern = 'cloudCover', replacement = 'cloud_cover', x = .data$name),
+      name = gsub(pattern = 'cloudBase', replacement = 'cloud_base', x = .data$name),
+      name = gsub(pattern = 'cloudCeiling', replacement = 'cloud_ceiling', x = .data$name)
+    ) %>%
+    tidyr::fill(.data$index, .direction = 'down') %>%
+    tidyr::pivot_wider(
+      names_from = .data$name,
+      values_from = .data$value
+    ) %>%
+    dplyr::select(-.data$index)
+
+  # now let's focus on the other stuff that is not related to cloud cover
   cln_out <- tibble::tibble(
     start_time = cln_result %>%
       dplyr::filter(stringr::str_detect(pattern = 'startTime', string = .data$name)) %>%
@@ -234,26 +266,31 @@ climacell_precip <- function(api_key, lat, long, timestep, start_time=NULL, end_
       dplyr::filter(stringr::str_detect(pattern = 'intervals.values.pressureSeaLevel', string = .data$name)) %>%
       dplyr::select(.data$value) %>%
       dplyr::pull(),
-    cloud_cover = cln_result %>%
-      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.cloudCover', string = .data$name)) %>%
-      dplyr::select(.data$value) %>%
-      dplyr::pull(),
-    cloud_base = cln_result %>%
-      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.cloudBase', string = .data$name)) %>%
-      dplyr::select(.data$value) %>%
-      dplyr::pull(),
-    cloud_ceiling = cln_result %>%
-      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.cloudCeiling', string = .data$name)) %>%
-      dplyr::select(.data$value) %>%
-      dplyr::pull(),
+    # cloud_cover = cln_result %>%
+    #   dplyr::filter(stringr::str_detect(pattern = 'intervals.values.cloudCover', string = .data$name)) %>%
+    #   dplyr::select(.data$value) %>%
+    #   dplyr::pull(),
+    # cloud_base = cln_result %>%
+    #   dplyr::filter(stringr::str_detect(pattern = 'intervals.values.cloudBase', string = .data$name)) %>%
+    #   dplyr::select(.data$value) %>%
+    #   dplyr::pull(),
+    # cloud_ceiling = cln_result %>%
+    #   dplyr::filter(stringr::str_detect(pattern = 'intervals.values.cloudCeiling', string = .data$name)) %>%
+    #   dplyr::select(.data$value) %>%
+    #   dplyr::pull(),
     weather_code = cln_result %>%
       dplyr::filter(stringr::str_detect(pattern = 'intervals.values.weatherCode', string = .data$name)) %>%
       dplyr::select(.data$value) %>%
       dplyr::pull()
   )
 
+  # combine the two (cloud cover) and the cln_out together
+
+  cln_combo <- cln_out %>%
+    dplyr::left_join(df_cloud, by = c('start_time'))
+
   # change data types
-  cln_out <- cln_out %>%
+  cln_combo <- cln_combo %>%
     dplyr::mutate(
       start_time = lubridate::ymd_hms(.data$start_time, tz = 'UTC'),
       precipitation_intensity = as.numeric(.data$precipitation_intensity),
@@ -269,7 +306,7 @@ climacell_precip <- function(api_key, lat, long, timestep, start_time=NULL, end_
     )
 
   # combine the dictionary values and rearrange columns
-  cln_out <- cln_out %>%
+  cln_combo <- cln_combo %>%
     dplyr::left_join(precip_type_dict, by = c('precipitation_type_code' = 'precipitation_type_code')) %>%
     dplyr::left_join(weather_code_dict, by = c('weather_code' = 'weather_code')) %>%
     dplyr::select(.data$start_time,
@@ -286,5 +323,5 @@ climacell_precip <- function(api_key, lat, long, timestep, start_time=NULL, end_
                   .data$weather_code,
                   .data$weather_desc)
 
-  return(cln_out)
+  return(cln_combo)
 }

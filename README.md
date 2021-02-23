@@ -10,6 +10,8 @@ MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/
 [![GitHub
 commit](https://img.shields.io/github/last-commit/nikdata/RClimacell)](https://github.com/nikdata/RClimacell/commit/main)
 [![R-CMD-check](https://github.com/nikdata/RClimacell/workflows/R-CMD-check/badge.svg)](https://github.com/nikdata/RClimacell/actions)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/RClimacell)](https://CRAN.R-project.org/package=RClimacell)
 <!-- badges: end -->
 
 The {RClimacell} package is an **unofficial** R package that enables
@@ -26,6 +28,12 @@ More information about the Climacell API can be found on their
 [docs](https://docs.climacell.co/reference/api-overview) page.
 
 ## Installation
+
+CRAN version can be installed as follows:
+
+``` r
+install.packages('RClimacell')
+```
 
 You can install the development version from
 [GitHub](https://github.com/) with:
@@ -50,10 +58,10 @@ climacell_temperature(api_key = Sys.getenv("CLIMACELL_API"),
 #> # A tibble: 4 x 5
 #>   start_time          temp_c temp_feel_c dewpoint humidity
 #>   <dttm>               <dbl>       <dbl>    <dbl>    <dbl>
-#> 1 2021-02-06 12:00:00  -8.7       -15.3    -12.0      84.4
-#> 2 2021-02-07 12:00:00 -14.6       -20.9    -19.4      77.6
-#> 3 2021-02-08 12:00:00  -6.81       -9.92    -8.67     88.2
-#> 4 2021-02-09 12:00:00  -7.48      -15.3     -9.09     88.8
+#> 1 2021-02-23 12:00:00   8.89        6.13     3.26     78.0
+#> 2 2021-02-24 12:00:00   4.45        4.45     1.98     93.8
+#> 3 2021-02-25 12:00:00   2.49       -1.63    -2.25     94.0
+#> 4 2021-02-26 12:00:00   3.21        0.04    -1.11     96.2
 ```
 
 ### Wind
@@ -69,34 +77,39 @@ climacell_wind(api_key = Sys.getenv("CLIMACELL_API"),
 #> # A tibble: 4 x 4
 #>   start_time          wind_speed wind_gust wind_direction
 #>   <dttm>                   <dbl>     <dbl>          <dbl>
-#> 1 2021-02-06 12:00:00       7.08     10.8            279.
-#> 2 2021-02-07 12:00:00       6.45      8.92           287.
-#> 3 2021-02-08 12:00:00       6.51      8.92           172.
-#> 4 2021-02-09 12:00:00       9.24     12.5            335.
+#> 1 2021-02-23 12:00:00       9.69     14.0            230.
+#> 2 2021-02-24 12:00:00       8.82     12.0            287.
+#> 3 2021-02-25 12:00:00       5.62      7.21           247.
+#> 4 2021-02-26 12:00:00       4.13      6.07           171.
 ```
 
 ## Precipitation
 
 ``` r
 library(RClimacell)
-climacell_precip(api_key = Sys.getenv("CLIMACELL_API"),
+df_precip <- climacell_precip(api_key = Sys.getenv("CLIMACELL_API"),
                  lat = 41.878685,
                  long = -87.636011,
-                 timestep = '1d',
+                 timestep = '1h',
                  start_time = Sys.time(),
                  end_time = Sys.time() + lubridate::days(3))
-#> # A tibble: 5 x 13
-#>   start_time          precipitation_i… precipitation_p… precipitation_t…
-#>   <dttm>                         <dbl>            <dbl>            <dbl>
-#> 1 2021-02-06 12:00:00           1.1                  90                2
-#> 2 2021-02-07 12:00:00           0.372                20                2
-#> 3 2021-02-08 12:00:00           0.197                25                2
-#> 4 2021-02-09 12:00:00           0                     0                2
-#> 5 2021-02-10 12:00:00           0.0663                0                2
-#> # … with 9 more variables: precipitation_type_desc <chr>, visibility <dbl>,
-#> #   pressure_surface_level <dbl>, pressure_sea_level <dbl>, cloud_cover <dbl>,
-#> #   cloud_base <dbl>, cloud_ceiling <dbl>, weather_code <dbl>,
-#> #   weather_desc <chr>
+
+dplyr::glimpse(df_precip)
+#> Rows: 100
+#> Columns: 13
+#> $ start_time                <dttm> 2021-02-23 20:27:00, 2021-02-23 21:27:00, …
+#> $ precipitation_intensity   <dbl> 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0…
+#> $ precipitation_probability <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+#> $ precipitation_type_code   <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+#> $ precipitation_type_desc   <chr> "Rain", "Rain", "Rain", "Rain", "Rain", "Ra…
+#> $ visibility                <dbl> 11.60, 16.00, 16.00, 15.91, 15.89, 16.00, 1…
+#> $ pressure_surface_level    <dbl> 991.49, 991.74, 992.15, 991.91, 992.11, 991…
+#> $ pressure_sea_level        <dbl> 1010.95, 1010.30, 1010.77, 1010.52, 1010.80…
+#> $ cloud_cover               <dbl> 26.32, 82.85, 62.92, 35.64, 5.57, 49.73, 10…
+#> $ cloud_base                <dbl> NA, 4.89, 3.80, 4.31, NA, NA, 0.44, 1.41, 8…
+#> $ cloud_ceiling             <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 7.2…
+#> $ weather_code              <dbl> 1100, 1001, 1102, 1100, 1000, 1101, 1001, 1…
+#> $ weather_desc              <chr> "Mostly Clear", "Cloudy", "Mostly Cloudy", …
 ```
 
 See the [vignette](https://nikdata.github.io/RClimacell/) for more
