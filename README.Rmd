@@ -27,6 +27,16 @@ Please note that using the functions within this package **require** a valid API
 
 More information about the Climacell API can be found on their [docs](https://docs.climacell.co/reference/api-overview) page.
 
+### Lubridate Issue
+
+As of 24 Feb, there is a [known issue](https://github.com/tidyverse/lubridate/issues/928) with using the package {lubridate} and it seems to be affecting macOS users. The 'fix' has been to add the following line to the .Renviron file or the .Rprofile (I applied the code into the .Renviron file and it worked):
+
+```r
+TZDIR="/Library/Frameworks/R.framework/Resources/share/zoneinfo/"
+```
+
+A fix is on the way for {lubridate}, but, as of 24 Feb, was not on CRAN.
+
 ## Installation
 
 CRAN version can be installed as follows:
