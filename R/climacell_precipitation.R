@@ -191,8 +191,8 @@ climacell_precip <- function(api_key, lat, long, timestep, start_time=NULL, end_
                    fields = 'cloudCeiling',
                    fields = 'weatherCode',
                    timesteps=timestep,
-                   startTime = parsedate::format_iso_8601(Sys.time()),
-                   endTime = parsedate::format_iso_8601(Sys.Date() + lubridate::days(5))
+                   startTime = start_time,
+                   endTime = end_time
       )
     )
   )
@@ -210,9 +210,9 @@ climacell_precip <- function(api_key, lat, long, timestep, start_time=NULL, end_
   my_results <- cln_result %>%
     dplyr::filter(stringr::str_detect(pattern = 'startTime', string = .data$name) | stringr::str_detect(pattern = 'cloud', string = .data$name))
 
-  my_results %>%
-    dplyr::filter(stringr::str_detect(pattern = 'startTime', string = .data$name)) %>%
-    dplyr::mutate(index = dplyr::row_number())
+  # my_results %>%
+  #   dplyr::filter(stringr::str_detect(pattern = 'startTime', string = .data$name)) %>%
+  #   dplyr::mutate(index = dplyr::row_number())
 
   df_cloud <- my_results %>%
     dplyr::left_join(
