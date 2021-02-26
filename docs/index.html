@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">RClimacell</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@
 <p>As of 24 Feb, there is a <a href="https://github.com/tidyverse/lubridate/issues/928">known issue</a> with using the package {lubridate} and it seems to be affecting macOS users. The ‘fix’ has been to add the following line to the .Renviron file or the .Rprofile (I applied the code into the .Renviron file and it worked):</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">TZDIR</span><span class="op">=</span><span class="st">"/Library/Frameworks/R.framework/Resources/share/zoneinfo/"</span></code></pre></div>
-<p>A fix is on the way for {lubridate}, but, as of 24 Feb, was not on CRAN.</p>
+<p>{lubridate} version 1.7.10 fixes this issue and is available on CRAN.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -108,15 +108,15 @@
                       lat <span class="op">=</span> <span class="fl">41.878685</span>,
                       long <span class="op">=</span> <span class="op">-</span><span class="fl">87.636011</span>,
                       timestep <span class="op">=</span> <span class="st">'1d'</span>,
-                      start_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>,
-                      end_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span>
+                      start_time <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/now.html">now</a></span><span class="op">(</span><span class="op">)</span>,
+                      end_time <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/now.html">now</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 4 x 5</span>
 <span class="co">#&gt;   start_time          temp_c temp_feel_c dewpoint humidity</span>
 <span class="co">#&gt;   &lt;dttm&gt;               &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 2021-02-24 12:00:00   7           7        4.01     95.0</span>
-<span class="co">#&gt; 2 2021-02-25 12:00:00   2.36       -1.8     -1.97     93.5</span>
-<span class="co">#&gt; 3 2021-02-26 12:00:00   3.14       -0.68     0.97     92.3</span>
-<span class="co">#&gt; 4 2021-02-27 12:00:00   3.06       -1.39     1.36     92.9</span></code></pre></div>
+<span class="co">#&gt; 1 2021-02-26 12:00:00   4.58        4.25     2.13     88.0</span>
+<span class="co">#&gt; 2 2021-02-27 12:00:00   8.79        8.79     2.33     96.2</span>
+<span class="co">#&gt; 3 2021-02-28 12:00:00   8.87        8.87     6.16     97.8</span>
+<span class="co">#&gt; 4 2021-03-01 12:00:00   0.82       -5.74    -4.97     86.2</span></code></pre></div>
 </div>
 <div id="wind" class="section level3">
 <h3 class="hasAnchor">
@@ -127,46 +127,46 @@
                lat <span class="op">=</span> <span class="fl">41.878685</span>,
                long <span class="op">=</span> <span class="op">-</span><span class="fl">87.636011</span>,
                timestep <span class="op">=</span> <span class="st">'1d'</span>,
-               start_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>,
-               end_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span>
+               start_time <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/now.html">now</a></span><span class="op">(</span><span class="op">)</span>,
+               end_time <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/now.html">now</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 4 x 4</span>
 <span class="co">#&gt;   start_time          wind_speed wind_gust wind_direction</span>
 <span class="co">#&gt;   &lt;dttm&gt;                   &lt;dbl&gt;     &lt;dbl&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 2021-02-24 12:00:00       5        12.1            325.</span>
-<span class="co">#&gt; 2 2021-02-25 12:00:00       5.07      6.5            241.</span>
-<span class="co">#&gt; 3 2021-02-26 12:00:00       9.25     12.3            171.</span>
-<span class="co">#&gt; 4 2021-02-27 12:00:00       6.95      9.15           240.</span></code></pre></div>
+<span class="co">#&gt; 1 2021-02-26 12:00:00       6.53      9.23           185.</span>
+<span class="co">#&gt; 2 2021-02-27 12:00:00       6.53      9.23           179.</span>
+<span class="co">#&gt; 3 2021-02-28 12:00:00       8.55     11.6            260.</span>
+<span class="co">#&gt; 4 2021-03-01 12:00:00       9.31     13.2            281.</span></code></pre></div>
 </div>
-</div>
-<div id="precipitation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#precipitation" class="anchor"></a>Precipitation</h2>
+<div id="precipitation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#precipitation" class="anchor"></a>Precipitation</h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">RClimacell</span><span class="op">)</span>
 <span class="va">df_precip</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/climacell_precip.html">climacell_precip</a></span><span class="op">(</span>api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"CLIMACELL_API"</span><span class="op">)</span>,
                  lat <span class="op">=</span> <span class="fl">41.878685</span>,
                  long <span class="op">=</span> <span class="op">-</span><span class="fl">87.636011</span>,
                  timestep <span class="op">=</span> <span class="st">'1h'</span>,
-                 start_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>,
-                 end_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span>
+                 start_time <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/now.html">now</a></span><span class="op">(</span><span class="op">)</span>,
+                 end_time <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/now.html">now</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">df_precip</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 73</span>
 <span class="co">#&gt; Columns: 13</span>
-<span class="co">#&gt; $ start_time                &lt;dttm&gt; 2021-02-24 15:49:00, 2021-02-24 16:49:00, …</span>
+<span class="co">#&gt; $ start_time                &lt;dttm&gt; 2021-02-26 19:33:00, 2021-02-26 20:33:00, …</span>
 <span class="co">#&gt; $ precipitation_intensity   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…</span>
-<span class="co">#&gt; $ precipitation_probability &lt;dbl&gt; 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4.1, 5.0, 0.9…</span>
+<span class="co">#&gt; $ precipitation_probability &lt;dbl&gt; 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.5, 12.…</span>
 <span class="co">#&gt; $ precipitation_type_code   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span>
 <span class="co">#&gt; $ precipitation_type_desc   &lt;chr&gt; "Rain", "Rain", "Rain", "Rain", "Rain", "Ra…</span>
 <span class="co">#&gt; $ visibility                &lt;dbl&gt; 10.00, 16.00, 16.00, 16.00, 16.00, 16.00, 1…</span>
-<span class="co">#&gt; $ pressure_surface_level    &lt;dbl&gt; 987.67, 989.15, 990.92, 993.04, 993.00, 994…</span>
-<span class="co">#&gt; $ pressure_sea_level        &lt;dbl&gt; 1008.48, 1008.34, 1009.70, 1011.81, 1011.82…</span>
-<span class="co">#&gt; $ cloud_cover               &lt;dbl&gt; 0.00, 0.00, 4.25, 81.08, 90.11, 76.76, 95.2…</span>
-<span class="co">#&gt; $ cloud_base                &lt;dbl&gt; NA, NA, NA, 0.65, 0.84, 0.85, 0.65, 1.19, 0…</span>
-<span class="co">#&gt; $ cloud_ceiling             &lt;dbl&gt; NA, NA, NA, 0.62, 1.00, NA, 0.61, NA, NA, N…</span>
-<span class="co">#&gt; $ weather_code              &lt;dbl&gt; 1000, 1000, 1000, 1001, 1001, 1001, 1001, 1…</span>
-<span class="co">#&gt; $ weather_desc              &lt;chr&gt; "Clear", "Clear", "Clear", "Cloudy", "Cloud…</span></code></pre></div>
+<span class="co">#&gt; $ pressure_surface_level    &lt;dbl&gt; 999.40, 998.43, 997.61, 997.11, 996.58, 995…</span>
+<span class="co">#&gt; $ pressure_sea_level        &lt;dbl&gt; 1020.59, 1016.96, 1016.25, 1015.72, 1015.11…</span>
+<span class="co">#&gt; $ cloud_cover               &lt;dbl&gt; 0.00, 2.65, 55.75, 100.00, 100.00, 100.00, …</span>
+<span class="co">#&gt; $ cloud_base                &lt;dbl&gt; NA, NA, 4.14, 3.58, 3.07, 2.68, 2.59, 1.88,…</span>
+<span class="co">#&gt; $ cloud_ceiling             &lt;dbl&gt; NA, NA, NA, NA, 2.89, 2.89, 2.46, 1.85, 2.0…</span>
+<span class="co">#&gt; $ weather_code              &lt;dbl&gt; 1000, 1000, 1101, 1001, 1001, 1001, 1001, 1…</span>
+<span class="co">#&gt; $ weather_desc              &lt;chr&gt; "Clear", "Clear", "Partly Cloudy", "Cloudy"…</span></code></pre></div>
 <p>See the <a href="https://nikdata.github.io/RClimacell/">vignette</a> for more information.</p>
+</div>
 </div>
 </div>
   </div>
