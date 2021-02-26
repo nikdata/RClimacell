@@ -35,7 +35,7 @@ As of 24 Feb, there is a [known issue](https://github.com/tidyverse/lubridate/is
 TZDIR="/Library/Frameworks/R.framework/Resources/share/zoneinfo/"
 ```
 
-A fix is on the way for {lubridate}, but, as of 24 Feb, was not on CRAN.
+{lubridate} version 1.7.10 fixes this issue and is available on CRAN.
 
 ## Installation
 
@@ -61,8 +61,8 @@ climacell_temperature(api_key = Sys.getenv("CLIMACELL_API"),
                       lat = 41.878685,
                       long = -87.636011,
                       timestep = '1d',
-                      start_time = Sys.time(),
-                      end_time = Sys.time() + lubridate::days(3))
+                      start_time = lubridate::now(),
+                      end_time = lubridate::now() + lubridate::days(3))
 
 ```
 
@@ -73,19 +73,19 @@ climacell_wind(api_key = Sys.getenv("CLIMACELL_API"),
                lat = 41.878685,
                long = -87.636011,
                timestep = '1d',
-               start_time = Sys.time(),
-               end_time = Sys.time() + lubridate::days(3))
+               start_time = lubridate::now(),
+               end_time = lubridate::now() + lubridate::days(3))
 ```
 
-## Precipitation
+### Precipitation
 ```{r}
 library(RClimacell)
 df_precip <- climacell_precip(api_key = Sys.getenv("CLIMACELL_API"),
                  lat = 41.878685,
                  long = -87.636011,
                  timestep = '1h',
-                 start_time = Sys.time(),
-                 end_time = Sys.time() + lubridate::days(3))
+                 start_time = lubridate::now(),
+                 end_time = lubridate::now() + lubridate::days(3))
 
 dplyr::glimpse(df_precip)
 ```

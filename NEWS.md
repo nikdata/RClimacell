@@ -1,3 +1,7 @@
+# RClimacell 0.1.2
+
+* Climacell API does not return results unless non-zero values are present for pressure; added extra steps to account for this.
+
 # RClimacell 0.1.1
 
 * fixed a bug where the `climacell_precip()` function would not return results for the correct lat/long and `timestep` argument.

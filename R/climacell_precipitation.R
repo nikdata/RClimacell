@@ -236,7 +236,63 @@ climacell_precip <- function(api_key, lat, long, timestep, start_time=NULL, end_
     ) %>%
     dplyr::select(-.data$index)
 
-  # now let's focus on the other stuff that is not related to cloud cover
+  # check to make sure that columns cloud_base and cloud_ceiling are present
+  cb_chk <- assertthat::has_name(df_cloud, 'cloud_base')
+  cc_chk <- assertthat::has_name(df_cloud, 'cloud_ceiling')
+
+  # if any column is missing, add it to df_cloud
+  if(cb_chk == FALSE) {
+    df_cloud <- df_cloud %>%
+      tibble::add_column(cloud_base = NA)
+  }
+
+  if(cc_chk == FALSE) {
+    df_cloud <- df_cloud %>%
+      tibble::add_column(cloud_ceiling = NA)
+  }
+
+  # now do the same with pressure levels
+
+  prs_results <- cln_result %>%
+    dplyr::filter(stringr::str_detect(pattern = 'startTime', string = .data$name) | stringr::str_detect(pattern = 'pressure', string = .data$name))
+
+  df_pressure <- prs_results %>%
+    dplyr::left_join(
+      prs_results %>%
+        dplyr::filter(stringr::str_detect(pattern = 'startTime', string = .data$name)) %>%
+        dplyr::mutate(index = dplyr::row_number()),
+      by = c('name','value')
+    ) %>%
+    dplyr::mutate(
+      name = gsub(pattern = 'intervals.', replacement = '', x = .data$name),
+      name = gsub(pattern = 'values.', replacement = '', x = .data$name),
+      name = gsub(pattern = 'startTime', replacement = 'start_time', x = .data$name),
+      name = gsub(pattern = 'pressureSurfaceLevel', replacement = 'pressure_surface_level', x = .data$name),
+      name = gsub(pattern = 'pressureSeaLevel', replacement = 'pressure_sea_level', x = .data$name)
+    ) %>%
+    tidyr::fill(.data$index, .direction = 'down') %>%
+    tidyr::pivot_wider(
+      names_from = .data$name,
+      values_from = .data$value
+    ) %>%
+    dplyr::select(-.data$index)
+
+  # check to make sure that columns cloud_base and cloud_ceiling are present
+  psurf_chk <- assertthat::has_name(df_pressure, 'pressure_surface_level')
+  psea_chk <- assertthat::has_name(df_pressure, 'pressure_sea_level')
+
+  # if any column is missing, add it to df_cloud
+  if(psurf_chk == FALSE) {
+    df_pressure <- df_pressure %>%
+      tibble::add_column(pressure_surface_level = NA)
+  }
+
+  if(psea_chk == FALSE) {
+    df_pressure <- df_pressure %>%
+      tibble::add_column(pressure_sea_level = NA)
+  }
+
+  # now let's focus on the other stuff that is not related to cloud cover or pressure level
   cln_out <- tibble::tibble(
     start_time = cln_result %>%
       dplyr::filter(stringr::str_detect(pattern = 'startTime', string = .data$name)) %>%
@@ -258,26 +314,6 @@ climacell_precip <- function(api_key, lat, long, timestep, start_time=NULL, end_
       dplyr::filter(stringr::str_detect(pattern = 'intervals.values.visibility', string = .data$name)) %>%
       dplyr::select(.data$value) %>%
       dplyr::pull(),
-    pressure_surface_level = cln_result %>%
-      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.pressureSurfaceLevel', string = .data$name)) %>%
-      dplyr::select(.data$value) %>%
-      dplyr::pull(),
-    pressure_sea_level = cln_result %>%
-      dplyr::filter(stringr::str_detect(pattern = 'intervals.values.pressureSeaLevel', string = .data$name)) %>%
-      dplyr::select(.data$value) %>%
-      dplyr::pull(),
-    # cloud_cover = cln_result %>%
-    #   dplyr::filter(stringr::str_detect(pattern = 'intervals.values.cloudCover', string = .data$name)) %>%
-    #   dplyr::select(.data$value) %>%
-    #   dplyr::pull(),
-    # cloud_base = cln_result %>%
-    #   dplyr::filter(stringr::str_detect(pattern = 'intervals.values.cloudBase', string = .data$name)) %>%
-    #   dplyr::select(.data$value) %>%
-    #   dplyr::pull(),
-    # cloud_ceiling = cln_result %>%
-    #   dplyr::filter(stringr::str_detect(pattern = 'intervals.values.cloudCeiling', string = .data$name)) %>%
-    #   dplyr::select(.data$value) %>%
-    #   dplyr::pull(),
     weather_code = cln_result %>%
       dplyr::filter(stringr::str_detect(pattern = 'intervals.values.weatherCode', string = .data$name)) %>%
       dplyr::select(.data$value) %>%
@@ -287,7 +323,8 @@ climacell_precip <- function(api_key, lat, long, timestep, start_time=NULL, end_
   # combine the two (cloud cover) and the cln_out together
 
   cln_combo <- cln_out %>%
-    dplyr::left_join(df_cloud, by = c('start_time'))
+    dplyr::left_join(df_cloud, by = c('start_time')) %>%
+    dplyr::left_join(df_pressure, by = c('start_time'))
 
   # change data types
   cln_combo <- cln_combo %>%
