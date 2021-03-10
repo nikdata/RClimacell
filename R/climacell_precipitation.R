@@ -177,7 +177,7 @@ climacell_precip <- function(api_key, lat, long, timestep, start_time=NULL, end_
   result <- httr::content(
     httr::GET(
       url = 'https://data.climacell.co/v4/timelines',
-      httr::add_headers('apikey'= '804rce5PoZ1HGkPEO6VFIfGGXl9RASEa'),
+      httr::add_headers('apikey'= api_key),
       httr::add_headers('content-type:' = 'application/json'),
       query = list(location = latlong,
                    fields = 'precipitationIntensity',
