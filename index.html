@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">RClimacell</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
       </span>
     </div>
 
@@ -56,7 +56,14 @@
   <a href="news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/nikdata/RClimacell/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -103,7 +110,7 @@
 <h3 class="hasAnchor">
 <a href="#temperature" class="anchor"></a>Temperature</h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">RClimacell</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://nikdata.github.io/RClimacell/">RClimacell</a></span><span class="op">)</span>
 <span class="fu"><a href="reference/climacell_temperature.html">climacell_temperature</a></span><span class="op">(</span>api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"CLIMACELL_API"</span><span class="op">)</span>,
                       lat <span class="op">=</span> <span class="fl">41.878685</span>,
                       long <span class="op">=</span> <span class="op">-</span><span class="fl">87.636011</span>,
@@ -122,7 +129,7 @@
 <h3 class="hasAnchor">
 <a href="#wind" class="anchor"></a>Wind</h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">RClimacell</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://nikdata.github.io/RClimacell/">RClimacell</a></span><span class="op">)</span>
 <span class="fu"><a href="reference/climacell_wind.html">climacell_wind</a></span><span class="op">(</span>api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"CLIMACELL_API"</span><span class="op">)</span>,
                lat <span class="op">=</span> <span class="fl">41.878685</span>,
                long <span class="op">=</span> <span class="op">-</span><span class="fl">87.636011</span>,
@@ -141,7 +148,7 @@
 <h3 class="hasAnchor">
 <a href="#precipitation" class="anchor"></a>Precipitation</h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">RClimacell</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://nikdata.github.io/RClimacell/">RClimacell</a></span><span class="op">)</span>
 <span class="va">df_precip</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/climacell_precip.html">climacell_precip</a></span><span class="op">(</span>api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"CLIMACELL_API"</span><span class="op">)</span>,
                  lat <span class="op">=</span> <span class="fl">41.878685</span>,
                  long <span class="op">=</span> <span class="op">-</span><span class="fl">87.636011</span>,
@@ -176,6 +183,10 @@
 <h2>Links</h2>
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=RClimacell">https://​cloud.r-project.org/​package=RClimacell</a>
+</li>
+<li>Browse source code at <br><a href="https://github.com/nikdata/RClimacell/">https://​github.com/​nikdata/​RClimacell/​</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/nikdata/RClimacell/issues">https://​github.com/​nikdata/​RClimacell/​issues</a>
 </li>
 </ul>
 </div>
