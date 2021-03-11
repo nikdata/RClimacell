@@ -1,3 +1,7 @@
+# RClimacell 0.1.3
+
+* fixed a bug where the user user provided API key was not used
+
 # RClimacell 0.1.2
 
 * Climacell API does not return results unless non-zero values are present for pressure; added extra steps to account for this.

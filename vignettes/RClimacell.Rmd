@@ -54,7 +54,7 @@ The following table summarizes which CORE layers are available in the current pa
 | visibility               | visibility                   | yes                     | `climacell_precip()`      |
 | cloudCover               | cloud_cover                  | yes                     | `climacell_precip()`      |
 | cloudBase                | cloud_base                   | yes                     | `climacell_precip()`      |
-| cloudCeiling             | cloud_ceiling                | yes                     | n/a                       |
+| cloudCeiling             | cloud_ceiling                | yes                     | `climacell_precip()`      |
 | moonPhase                | n/a                          | NO                      | n/a                       |
 | weatherCode              | weather_code                 | yes                     | `climacell_precip()`      |
 

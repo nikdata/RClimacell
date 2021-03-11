@@ -34,7 +34,7 @@
 #' }
 climacell_temperature <- function(api_key, lat, long, timestep, start_time=NULL, end_time=NULL) {
 
-  # check for missig key or empty environment variable
+  # check for missing key or empty environment variable
   if(missing(api_key) & Sys.getenv('CLIMACELL_API') == '') {
     stop("No API key provided nor default CLIMACELL_API environment variable found.\nPlease provide valid API key.")
   }
