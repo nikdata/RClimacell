@@ -14,17 +14,17 @@ climacell_wind(
 )
 }
 \arguments{
-\item{api_key}{character string representing the private API key. Provided by user or loaded automatically from environment variable (environment variable must be called "CLIMACELL_API")}
+\item{api_key}{character string representing the private API key. Provided by user or loaded automatically from environment variable (environment variable must be called "CLIMACELL_API").}
 
-\item{lat}{a numeric value (or a string that can be coerced to numeric) representing the latitude of the location}
+\item{lat}{a numeric value (or a string that can be coerced to numeric) representing the latitude of the location.}
 
-\item{long}{a numeric value (or a string that can be coerced to numeric) representing the longitude of the location}
+\item{long}{a numeric value (or a string that can be coerced to numeric) representing the longitude of the location.}
 
-\item{timestep}{a 'step' value for the time. Choose one of the following valid values: c('1d', '1h', '30m','15m','5m','1m','current')}
+\item{timestep}{a 'step' value for the time. Choose one of the following valid values: c('1d', '1h', '30m','15m','5m','1m','current').}
 
-\item{start_time}{the start date and time of the query in \href{https://en.wikipedia.org/wiki/ISO_8601}{ISO8601} format. This value cannot be more than 6 hours prior to the current local time. OPTIONAL if timestep is 'current'.}
+\item{start_time}{the start time of the query. This input must be a character string that can be parsed into a data/time or a date/time value. If the input does not contain a timezone, the value will be assumed to be in UTC. It is recommended that the \code{lubridate::now()} function or \code{Sys.time()} be used to define the start_time. For this function, the start_time cannot be less than 6 hours from the current time.}
 
-\item{end_time}{the end date and time of the query in \href{https://en.wikipedia.org/wiki/ISO_8601}{ISO8601} format. The maximum end date/time depends on the timestep value chosen (see vignette for more information). OPTIONAL if timestep is 'current' or you wish to get the maximum results possible.}
+\item{end_time}{the end time of the query. This input must be a character string that can be parsed into a data/time or a date/time value. If the input does not contain a timezone, the value will be assumed to be in UTC. OPTIONAL if timestep is 'current' or if the user desires to get the maximum results possible (depends on the timestep chosen).}
 }
 \value{
 a tibble

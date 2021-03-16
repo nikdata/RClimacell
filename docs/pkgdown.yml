@@ -2,6 +2,7 @@ pandoc: 2.11.2
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
-  RClimacell: RClimacell.html
-last_built: 2021-03-10T21:42Z
+  cc1_intro: cc1_intro.html
+  cc2_usage: cc2_usage.html
+last_built: 2021-03-16T21:17Z
 

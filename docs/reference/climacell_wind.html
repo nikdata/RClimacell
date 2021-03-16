@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RClimacell</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9000</span>
       </span>
     </div>
 
@@ -85,17 +85,34 @@
   </a>
 </li>
 <li>
-  <a href="../articles/RClimacell.html">Get started</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/cc1_intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="../articles/cc2_usage.html">Usage</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/nikdata/RClimacell/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -110,7 +127,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Wind Readings from Climacell</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/nikdata/RClimacell/blob/master/R/climacell_wind.R'><code>R/climacell_wind.R</code></a></small>
     <div class="hidden name"><code>climacell_wind.Rd</code></div>
     </div>
 
@@ -132,27 +149,27 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>api_key</th>
-      <td><p>character string representing the private API key. Provided by user or loaded automatically from environment variable (environment variable must be called "CLIMACELL_API")</p></td>
+      <td><p>character string representing the private API key. Provided by user or loaded automatically from environment variable (environment variable must be called "CLIMACELL_API").</p></td>
     </tr>
     <tr>
       <th>lat</th>
-      <td><p>a numeric value (or a string that can be coerced to numeric) representing the latitude of the location</p></td>
+      <td><p>a numeric value (or a string that can be coerced to numeric) representing the latitude of the location.</p></td>
     </tr>
     <tr>
       <th>long</th>
-      <td><p>a numeric value (or a string that can be coerced to numeric) representing the longitude of the location</p></td>
+      <td><p>a numeric value (or a string that can be coerced to numeric) representing the longitude of the location.</p></td>
     </tr>
     <tr>
       <th>timestep</th>
-      <td><p>a 'step' value for the time. Choose one of the following valid values: c('1d', '1h', '30m','15m','5m','1m','current')</p></td>
+      <td><p>a 'step' value for the time. Choose one of the following valid values: c('1d', '1h', '30m','15m','5m','1m','current').</p></td>
     </tr>
     <tr>
       <th>start_time</th>
-      <td><p>the start date and time of the query in <a href='https://en.wikipedia.org/wiki/ISO_8601'>ISO8601</a> format. This value cannot be more than 6 hours prior to the current local time. OPTIONAL if timestep is 'current'.</p></td>
+      <td><p>the start time of the query. This input must be a character string that can be parsed into a data/time or a date/time value. If the input does not contain a timezone, the value will be assumed to be in UTC. It is recommended that the <code><a href='http://lubridate.tidyverse.org/reference/now.html'>lubridate::now()</a></code> function or <code><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.time()</a></code> be used to define the start_time. For this function, the start_time cannot be less than 6 hours from the current time.</p></td>
     </tr>
     <tr>
       <th>end_time</th>
-      <td><p>the end date and time of the query in <a href='https://en.wikipedia.org/wiki/ISO_8601'>ISO8601</a> format. The maximum end date/time depends on the timestep value chosen (see vignette for more information). OPTIONAL if timestep is 'current' or you wish to get the maximum results possible.</p></td>
+      <td><p>the end time of the query. This input must be a character string that can be parsed into a data/time or a date/time value. If the input does not contain a timezone, the value will be assumed to be in UTC. OPTIONAL if timestep is 'current' or if the user desires to get the maximum results possible (depends on the timestep chosen).</p></td>
     </tr>
     </table>
 

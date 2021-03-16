@@ -54,6 +54,8 @@ devtools::install_github("nikdata/RClimacell")
 
 ## Usage
 
+Not every variable in each of the functions will have a value. Missing values are denoted by NA and indicate that the API did not return a value for the specific date/time and function call.
+
 ### Temperature
 ```{r temperature_example}
 library(RClimacell)
@@ -90,5 +92,18 @@ df_precip <- climacell_precip(api_key = Sys.getenv("CLIMACELL_API"),
 dplyr::glimpse(df_precip)
 ```
 
+### Celestial (sunset time, sunrise time, and moon phase)
+
+```{r}
+library(RClimacell)
+df_celestial <- climacell_celestial(api_key = Sys.getenv("CLIMACELL_API"),
+                 lat = 41.878685,
+                 long = -87.636011,
+                 timestep = '1d',
+                 start_time = lubridate::now(),
+                 end_time = lubridate::now() + lubridate::days(5))
+
+dplyr::glimpse(df_celestial)
+```
 
 See the [vignette](https://nikdata.github.io/RClimacell/) for more information.

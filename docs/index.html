@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">RClimacell</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9000</span>
       </span>
     </div>
 
@@ -47,16 +47,35 @@
   </a>
 </li>
 <li>
-  <a href="articles/RClimacell.html">Get started</a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/cc1_intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="articles/cc2_usage.html">Usage</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/nikdata/RClimacell/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -103,7 +122,7 @@
 <h3 class="hasAnchor">
 <a href="#temperature" class="anchor"></a>Temperature</h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">RClimacell</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://nikdata.github.io/RClimacell/">RClimacell</a></span><span class="op">)</span>
 <span class="fu"><a href="reference/climacell_temperature.html">climacell_temperature</a></span><span class="op">(</span>api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"CLIMACELL_API"</span><span class="op">)</span>,
                       lat <span class="op">=</span> <span class="fl">41.878685</span>,
                       long <span class="op">=</span> <span class="op">-</span><span class="fl">87.636011</span>,
@@ -113,16 +132,16 @@
 <span class="co">#&gt; # A tibble: 4 x 5</span>
 <span class="co">#&gt;   start_time          temp_c temp_feel_c dewpoint humidity</span>
 <span class="co">#&gt;   &lt;dttm&gt;               &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 2021-02-26 12:00:00   4.58        4.25     2.13     88.0</span>
-<span class="co">#&gt; 2 2021-02-27 12:00:00   8.79        8.79     2.33     96.2</span>
-<span class="co">#&gt; 3 2021-02-28 12:00:00   8.87        8.87     6.16     97.8</span>
-<span class="co">#&gt; 4 2021-03-01 12:00:00   0.82       -5.74    -4.97     86.2</span></code></pre></div>
+<span class="co">#&gt; 1 2021-03-12 12:00:00   4.44        4.94     0.39     89.8</span>
+<span class="co">#&gt; 2 2021-03-13 12:00:00   7.98        7.98     1.79     78.4</span>
+<span class="co">#&gt; 3 2021-03-14 11:00:00   3.65       -1.45     0.36     82.3</span>
+<span class="co">#&gt; 4 2021-03-15 11:00:00   0.14       -5.48    -2.63     87.9</span></code></pre></div>
 </div>
 <div id="wind" class="section level3">
 <h3 class="hasAnchor">
 <a href="#wind" class="anchor"></a>Wind</h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">RClimacell</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://nikdata.github.io/RClimacell/">RClimacell</a></span><span class="op">)</span>
 <span class="fu"><a href="reference/climacell_wind.html">climacell_wind</a></span><span class="op">(</span>api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"CLIMACELL_API"</span><span class="op">)</span>,
                lat <span class="op">=</span> <span class="fl">41.878685</span>,
                long <span class="op">=</span> <span class="op">-</span><span class="fl">87.636011</span>,
@@ -132,16 +151,16 @@
 <span class="co">#&gt; # A tibble: 4 x 4</span>
 <span class="co">#&gt;   start_time          wind_speed wind_gust wind_direction</span>
 <span class="co">#&gt;   &lt;dttm&gt;                   &lt;dbl&gt;     &lt;dbl&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 2021-02-26 12:00:00       6.53      9.23           185.</span>
-<span class="co">#&gt; 2 2021-02-27 12:00:00       6.53      9.23           179.</span>
-<span class="co">#&gt; 3 2021-02-28 12:00:00       8.55     11.6            260.</span>
-<span class="co">#&gt; 4 2021-03-01 12:00:00       9.31     13.2            281.</span></code></pre></div>
+<span class="co">#&gt; 1 2021-03-12 12:00:00       2.56      4.22           88.8</span>
+<span class="co">#&gt; 2 2021-03-13 12:00:00       5.16      6.98          219. </span>
+<span class="co">#&gt; 3 2021-03-14 11:00:00      10.4      15.1            51.8</span>
+<span class="co">#&gt; 4 2021-03-15 11:00:00      11.1      16.2            90.0</span></code></pre></div>
 </div>
 <div id="precipitation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#precipitation" class="anchor"></a>Precipitation</h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">RClimacell</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://nikdata.github.io/RClimacell/">RClimacell</a></span><span class="op">)</span>
 <span class="va">df_precip</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/climacell_precip.html">climacell_precip</a></span><span class="op">(</span>api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"CLIMACELL_API"</span><span class="op">)</span>,
                  lat <span class="op">=</span> <span class="fl">41.878685</span>,
                  long <span class="op">=</span> <span class="op">-</span><span class="fl">87.636011</span>,
@@ -150,21 +169,42 @@
                  end_time <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/now.html">now</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">df_precip</span><span class="op">)</span>
-<span class="co">#&gt; Rows: 73</span>
+<span class="co">#&gt; Rows: 72</span>
 <span class="co">#&gt; Columns: 13</span>
-<span class="co">#&gt; $ start_time                &lt;dttm&gt; 2021-02-26 19:33:00, 2021-02-26 20:33:00, …</span>
-<span class="co">#&gt; $ precipitation_intensity   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…</span>
-<span class="co">#&gt; $ precipitation_probability &lt;dbl&gt; 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.5, 12.…</span>
-<span class="co">#&gt; $ precipitation_type_code   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span>
-<span class="co">#&gt; $ precipitation_type_desc   &lt;chr&gt; "Rain", "Rain", "Rain", "Rain", "Rain", "Ra…</span>
-<span class="co">#&gt; $ visibility                &lt;dbl&gt; 10.00, 16.00, 16.00, 16.00, 16.00, 16.00, 1…</span>
-<span class="co">#&gt; $ pressure_surface_level    &lt;dbl&gt; 999.40, 998.43, 997.61, 997.11, 996.58, 995…</span>
-<span class="co">#&gt; $ pressure_sea_level        &lt;dbl&gt; 1020.59, 1016.96, 1016.25, 1015.72, 1015.11…</span>
-<span class="co">#&gt; $ cloud_cover               &lt;dbl&gt; 0.00, 2.65, 55.75, 100.00, 100.00, 100.00, …</span>
-<span class="co">#&gt; $ cloud_base                &lt;dbl&gt; NA, NA, 4.14, 3.58, 3.07, 2.68, 2.59, 1.88,…</span>
-<span class="co">#&gt; $ cloud_ceiling             &lt;dbl&gt; NA, NA, NA, NA, 2.89, 2.89, 2.46, 1.85, 2.0…</span>
-<span class="co">#&gt; $ weather_code              &lt;dbl&gt; 1000, 1000, 1101, 1001, 1001, 1001, 1001, 1…</span>
-<span class="co">#&gt; $ weather_desc              &lt;chr&gt; "Clear", "Clear", "Partly Cloudy", "Cloudy"…</span></code></pre></div>
+<span class="co">#&gt; $ start_time                &lt;dttm&gt; 2021-03-12 22:59:00, 2021-03-12 23:59:00, 2…</span>
+<span class="co">#&gt; $ precipitation_intensity   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span>
+<span class="co">#&gt; $ precipitation_probability &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span>
+<span class="co">#&gt; $ precipitation_type_code   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…</span>
+<span class="co">#&gt; $ precipitation_type_desc   &lt;chr&gt; "Rain", "Rain", "Rain", "Rain", "Rain", "Rai…</span>
+<span class="co">#&gt; $ visibility                &lt;dbl&gt; 15.39, 15.89, 16.00, 16.00, 15.98, 14.04, 14…</span>
+<span class="co">#&gt; $ pressure_surface_level    &lt;dbl&gt; 1012.09, 1013.08, 1012.90, 1012.93, 1014.10,…</span>
+<span class="co">#&gt; $ pressure_sea_level        &lt;dbl&gt; 1032.35, 1031.65, 1031.59, 1031.63, 1032.88,…</span>
+<span class="co">#&gt; $ cloud_cover               &lt;dbl&gt; 100.00, 100.00, 100.00, 100.00, 100.00, 100.…</span>
+<span class="co">#&gt; $ cloud_base                &lt;dbl&gt; NA, 6.10, 6.07, 6.07, 6.07, 6.07, 6.06, 1.48…</span>
+<span class="co">#&gt; $ cloud_ceiling             &lt;dbl&gt; NA, 6.04, 5.95, 6.38, 9.14, 9.29, 9.73, NA, …</span>
+<span class="co">#&gt; $ weather_code              &lt;dbl&gt; 1001, 1001, 1001, 1001, 1001, 1001, 1001, 10…</span>
+<span class="co">#&gt; $ weather_desc              &lt;chr&gt; "Cloudy", "Cloudy", "Cloudy", "Cloudy", "Clo…</span></code></pre></div>
+</div>
+<div id="celestial-sunset-time-sunrise-time-and-moon-phase" class="section level3">
+<h3 class="hasAnchor">
+<a href="#celestial-sunset-time-sunrise-time-and-moon-phase" class="anchor"></a>Celestial (sunset time, sunrise time, and moon phase)</h3>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://nikdata.github.io/RClimacell/">RClimacell</a></span><span class="op">)</span>
+<span class="va">df_celestial</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/climacell_celestial.html">climacell_celestial</a></span><span class="op">(</span>api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"CLIMACELL_API"</span><span class="op">)</span>,
+                 lat <span class="op">=</span> <span class="fl">41.878685</span>,
+                 long <span class="op">=</span> <span class="op">-</span><span class="fl">87.636011</span>,
+                 timestep <span class="op">=</span> <span class="st">'1d'</span>,
+                 start_time <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/now.html">now</a></span><span class="op">(</span><span class="op">)</span>,
+                 end_time <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/now.html">now</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">df_celestial</span><span class="op">)</span>
+<span class="co">#&gt; Rows: 6</span>
+<span class="co">#&gt; Columns: 5</span>
+<span class="co">#&gt; $ start_time             &lt;dttm&gt; 2021-03-12 12:00:00, 2021-03-13 12:00:00, 2021…</span>
+<span class="co">#&gt; $ sunrise_time           &lt;dttm&gt; 2021-03-12 12:06:40, 2021-03-13 12:05:00, 2021…</span>
+<span class="co">#&gt; $ sunset_time            &lt;dttm&gt; 2021-03-12 23:53:20, 2021-03-13 23:53:20, 2021…</span>
+<span class="co">#&gt; $ moon_phase_code        &lt;int&gt; 7, 0, 0, 1, 1, 1</span>
+<span class="co">#&gt; $ moon_phase_description &lt;chr&gt; "Waning Crescent", "New", "New", "Waxing Cresce…</span></code></pre></div>
 <p>See the <a href="https://nikdata.github.io/RClimacell/">vignette</a> for more information.</p>
 </div>
 </div>
@@ -176,6 +216,10 @@
 <h2>Links</h2>
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=RClimacell">https://​cloud.r-project.org/​package=RClimacell</a>
+</li>
+<li>Browse source code at <br><a href="https://github.com/nikdata/RClimacell/">https://​github.com/​nikdata/​RClimacell/​</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/nikdata/RClimacell/issues">https://​github.com/​nikdata/​RClimacell/​issues</a>
 </li>
 </ul>
 </div>

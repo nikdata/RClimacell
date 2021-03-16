@@ -5,12 +5,12 @@
 #' @description This function will make a call to the Climacell API and retrieve temperature related variables.
 #'
 #'
-#' @param api_key character string representing the private API key. Provided by user or loaded automatically from environment variable (environment variable must be called "CLIMACELL_API")
-#' @param lat a numeric value (or a string that can be coerced to numeric) representing the latitude of the location
-#' @param long a numeric value (or a string that can be coerced to numeric) representing the longitude of the location
-#' @param timestep a 'step' value for the time. Choose one of the following valid values: c('1d', '1h', '30m','15m','5m','1m','current')
-#' @param start_time the start date and time of the query in \href{https://en.wikipedia.org/wiki/ISO_8601}{ISO8601} format. This value cannot be more than 6 hours prior to the current local time. OPTIONAL if timestep is 'current'.
-#' @param end_time the end date and time of the query in \href{https://en.wikipedia.org/wiki/ISO_8601}{ISO8601} format. The maximum end date/time depends on the timestep value chosen (see vignette for more information). OPTIONAL if timestep is 'current' or you wish to get the maximum results possible.
+#' @param api_key character string representing the private API key. Provided by user or loaded automatically from environment variable (environment variable must be called "CLIMACELL_API").
+#' @param lat a numeric value (or a string that can be coerced to numeric) representing the latitude of the location.
+#' @param long a numeric value (or a string that can be coerced to numeric) representing the longitude of the location.
+#' @param timestep a 'step' value for the time. Choose one of the following valid values: c('1d', '1h', '30m','15m','5m','1m','current').
+#' @param start_time the start time of the query. This input must be a character string that can be parsed into a data/time or a date/time value. If the input does not contain a timezone, the value will be assumed to be in UTC. It is recommended that the \code{lubridate::now()} function or \code{Sys.time()} be used to define the start_time. For this function, the start_time cannot be less than 6 hours from the current time.
+#' @param end_time the end time of the query. This input must be a character string that can be parsed into a data/time or a date/time value. If the input does not contain a timezone, the value will be assumed to be in UTC. OPTIONAL if timestep is 'current' or if the user desires to get the maximum results possible (depends on the timestep chosen).
 #'
 #' @return a tibble
 #' @export
@@ -18,7 +18,6 @@
 #' @import dplyr
 #' @import tibble
 #' @import httr
-#' @import parsedate
 #'
 #' @importFrom stringr str_detect
 #' @importFrom magrittr `%>%`
@@ -39,10 +38,12 @@ climacell_temperature <- function(api_key, lat, long, timestep, start_time=NULL,
     stop("No API key provided nor default CLIMACELL_API environment variable found.\nPlease provide valid API key.")
   }
 
-  # basic way of assigning environment variable that may not exist
+  # basic way of assigning environment variable
+  # if no api key found, "" is entered into variable and then a 32 character check is performed
   api_key <- Sys.getenv('CLIMACELL_API')
 
-  # ensure API key is 32 characters long
+  # ensure API key is 32 characters long (assumption that the API key is this long)
+  # could not find confirmation of this
   if(nchar(api_key) < 32) {
     stop('API Key length is shorter than 32 characters, please recheck')
   }
@@ -69,85 +70,141 @@ climacell_temperature <- function(api_key, lat, long, timestep, start_time=NULL,
 
   # a timestep of current cannot have start or end times
   if((timestep == 'current' & !is.null(start_time)) | timestep == 'current' & !is.null(end_time)) {
-    message("Timestep of current does not require start or end times.")
+    message("Timestep of 'current' cannot have start or end times.")
     start_time = NULL
     end_time = NULL
   }
 
+  # timestep can only have certain values
   if(!timestep %in% c('1d', '1h', '30m','15m','5m','1m','current')) {
     stop("Timestep value is incorrect. \nAcceptable values are (choose one only): c('current','1m','5m','15m','30m','1h','1d')")
   }
 
   if(timestep != 'current' & is.null(start_time)) {
-    warning("No start time provided. Using current system time in UTC for start_time.")
-    start_time <- parsedate::format_iso_8601(Sys.time())
+    message("No start time provided. Using current system time in UTC for start_time.")
+    start_time <- lubridate::format_ISO8601(lubridate::with_tz(time = Sys.time(), tzone = 'UTC'), usetz = T)
+  } else {
+    # if user has already provided a start_time parameter value
+    start_time <- lubridate::with_tz(time = start_time, tzone = 'UTC')
+    start_time <- lubridate::format_ISO8601(x = start_time, usetz = T)
   }
 
-  if(timestep != 'current' & is.null(end_time)) {
-    warning("No end time provided. End time will be adjusted for 1 day beyond the start_time.")
-    end_time <- parsedate::format_iso_8601(start_time + lubridate::days(1))
+  if(timestep %in% c('1m','5m', '15m','30m') & is.null(end_time)) {
+    message("No end time provided. End time will be adjusted for 6 hours from current system time!")
+    end_time <- lubridate::with_tz(time = Sys.time() + lubridate::dhours(6), tzone = 'UTC')
+    end_time <- lubridate::format_ISO8601(x = end_time, usetz = T)
+  } else if (timestep == '1h' & is.null(end_time)) {
+    message("No end time provided. End time will be adjusted for 108 hours from current system time!")
+    end_time <- lubridate::with_tz(time = Sys.time() + lubridate::dhours(108), tzone = 'UTC')
+    end_time <- lubridate::format_ISO8601(x = end_time, usetz = T)
+  } else if (timestep == '1d' & is.null(end_time)) {
+    message("No end time provided. End time will be adjusted for 15 days from current system time!")
+    end_time <- lubridate::with_tz(time = Sys.time() + lubridate::ddays(15), tzone = 'UTC')
+    end_time <- lubridate::format_ISO8601(x = end_time, usetz = T)
+  } else {
+    end_time <- lubridate::with_tz(time = end_time, tzone = 'UTC')
+    end_time <- lubridate::format_ISO8601(x = end_time, usetz = T)
   }
 
-  # check to make sure timestamps will parse
+  # make sure start time is before end time
+  if(start_time > end_time) {
+    stop("Start time cannot be later than the end time!")
+  }
 
-  if(timestep != 'current'){
-    if(is.na(parsedate::parse_iso_8601(start_time))) {
-      stop("Start time value is not in ISO 8601 format!")
-    } else {
-      start_time <- parsedate::format_iso_8601(start_time)
+  # error handling of the start & end times based on timestep used
+
+  # timesteps 1m, 15m, 30m only allow 6 hours max into future from current actual time
+  # timstep 1h allows for only 108 hours max into future from current actual time
+  # timestep 1d allows for only 15 days max into future from current actual time
+
+  # establish current time and the user times all in UTC
+  current_time <- lubridate::with_tz(lubridate::now(), tzone = 'UTC')
+  user_st_utc <- lubridate::ymd_hms(start_time)
+  user_et_utc <- lubridate::ymd_hms(end_time)
+
+  # define the maximum allowable time based on timestep
+  if(timestep %in% c('1m','15m','30m')) {
+    max_time_utc <- current_time + lubridate::dhours(6)
+  } else if(timestep %in% c('1h')) {
+    max_time_utc <- current_time + lubridate::dhours(108)
+  } else if(timestep %in% c('1d')) {
+    max_time_utc <- current_time + lubridate::ddays(15)
+  }
+
+  # if timestep is 1m, 15m, 30m, 1h then make sure start time is not 6 hours prior to current time
+
+  # st_cur_chk: difference between the current system time and user start time
+  # (< -6 means user start time is more than 6 hours prior to current system time)
+  st_cur_chk <- lubridate::time_length(lubridate::interval(start = current_time, end = user_st_utc), unit = 'hours')
+
+  if(st_cur_chk < -6.0) {
+    message('Start time is more than 6 hours prior to the current system time!')
+    message('Start time has been readjusted to be no more than 6 hours prior to current system time.')
+    start_time <- lubridate::with_tz(lubridate::now() - lubridate::dhours(6), tzone = 'UTC')
+    start_time <- lubridate::format_ISO8601(x = start_time, usetz = T)
+  }
+
+
+  # determine difference in time between the start time and the maximum allowable time
+  # st_max_chk: difference between the maximum limit time and the user start time (if <1, <15, or < 30 (depending on timestep), there is a problem)
+  st_max_chk <- lubridate::time_length(lubridate::interval(start = user_st_utc, end = max_time_utc), unit = 'minutes')
+
+  if(timestep == '1m' & st_max_chk < 1.0) {
+    stop("Start time cannot be less than 1 minute from maximum allowable time for this timestep!")
+  } else if(timestep == '15m' & st_max_chk < 15.0) {
+    stop("Start time cannot be less than 15 minutes from maximum allowable time for this timestep!")
+  } else if(timestep == '30m' & st_max_chk < 30.0) {
+    stop("Start time cannot be less than 30 minutes from maximum allowable time for this timestep!")
+  } else if(timestep == '1h' & st_max_chk < 60.0) {
+    stop("Start time cannot be less than 1 hour from maximum allowable time for this timestep!")
+  } else if(timestep == '1d' & st_max_chk < 1440.0) {
+    stop("Start time cannot be less than 24 hours from maximum allowable time for this timestep!")
+  }
+
+  # determine difference in time between end time and maximum allowable time
+  # et_max_chk: difference between maximum limit time and user end time (if < 0, user end time is more than limit)
+  et_max_chk <- lubridate::time_length(lubridate::interval(start = user_et_utc, end = max_time_utc), unit = 'hours')
+
+  if(et_max_chk < 0) {
+    if(timestep %in% c('1m','15m','30m')) {
+      message('End time is more than 6 hours ahead of the current system time!')
+      message('End time has been readjusted to be no more than 6 hours ahead of current system time.')
+      end_time <- lubridate::with_tz(lubridate::now() + lubridate::dhours(6), tzone = 'UTC')
+      end_time <- lubridate::format_ISO8601(x = end_time, usetz = T)
+    } else if(timestep == '1h') {
+      message('End time is more than 108 hours ahead of the current system time!')
+      message('End time has been readjusted to be no more than 108 hours ahead of current system time.')
+      end_time <- lubridate::with_tz(lubridate::now() + lubridate::dhours(108), tzone = 'UTC')
+      end_time <- lubridate::format_ISO8601(x = end_time, usetz = T)
+    } else if(timestep == '1d') {
+      message('End time is more than 15 days ahead of the current system time!')
+      message('End time has been readjusted to be no more than 15 days ahead of current system time.')
+      end_time <- lubridate::with_tz(lubridate::now() + lubridate::dhours(15), tzone = 'UTC')
+      end_time <- lubridate::format_ISO8601(x = end_time, usetz = T)
     }
   }
 
-  if(timestep != 'current') {
-    if(is.na(parsedate::parse_iso_8601(end_time))) {
-      stop("End time value is not in ISO 8601 format!")
-    } else {
-      end_time <- parsedate::format_iso_8601(end_time)
-    }
+  # need to make sure there is adequate difference between start & end times provided by user
+
+  et_st_chk <- lubridate::time_length(lubridate::interval(start = user_st_utc, end = user_et_utc), unit = 'minutes')
+
+  if(timestep == '1m' & et_st_chk < 1.0) {
+    stop('Difference between start time and end time cannot be less than 1 minute!')
+  } else if(timestep == '15m' & et_st_chk < 15.0) {
+    stop('Difference between start time and end time cannot be less than 15 minutes!')
+  } else if(timestep == '30m' & et_st_chk < 30.0) {
+    stop('Difference between start time and end time cannot be less than 30 minutes!')
+  } else if(timestep == '1h' & et_st_chk < 60.0) {
+    stop('Difference between start time and end time cannot be less than 60 minutes!')
+  } else if(timestep == '1d' & et_st_chk < 1440.0) {
+    stop('Difference between start time and end time cannot be less than 24 hours!')
   }
 
-  # ensure formatting of all times is good (will convert valid times to UTC)
-  start_time <- parsedate::format_iso_8601(parsedate::parse_date(start_time))
-  end_time <- parsedate::format_iso_8601(parsedate::parse_date(end_time))
-
-  # ensure that the start time is no more than 6 hours of the CURRENT system time (only needed if not using current)
-
-  if(timestep != 'current') {
-    current_systime_utc <- lubridate::with_tz(lubridate::now(), tzone = 'UTC')
-    user_starttime_utc <- lubridate::ymd_hms(start_time)
-    user_endtime_utc <- lubridate::ymd_hms(end_time)
-
-    diff_hour_check <- round(as.double(difftime(time1 = current_systime_utc, time2 = user_starttime_utc, units = 'hours')),1)
-
-    if(diff_hour_check > 6.0) {
-      stop("The Climacell Free API does not enable users to retrieve data that is older than 6 hours!")
-    }
-
-    future_time_chek_hrs <- round(as.double(difftime(time1 = user_endtime_utc, time2 = current_systime_utc, units = 'hours')),1)
-    future_time_chek_days <- round(as.double(difftime(time1 = user_endtime_utc, time2 = current_systime_utc, units = 'days')),1)
-
-    if(timestep == '1d' & future_time_chek_days > 15.0) {
-      warning("Climacell Free API only allows for upto 15 days into the future!\nReadjusting end time to no more than 15 days from start time.")
-      end_time <- parsedate::parse_iso_8601(start_time) + lubridate::days(15)
-      end_time <- parsedate::format_iso_8601(end_time)
-    }
-
-    if(timestep == '1h' & future_time_chek_hrs > 108.0) {
-      warning("Climacell Free API only allows for upto 108 hours into the future!\nReadjusting end time to no more than 108 hours from start time.")
-      end_time <- parsedate::parse_iso_8601(start_time) + lubridate::hours(108)
-      end_time <- parsedate::format_iso_8601(end_time)
-    }
-
-    if(timestep %in% c('1m','5m','15m','30m') & future_time_chek_hrs >= 6.0) {
-      warning("Climacell Free API only allows for upto 6 hours into the future!\nReadjusting end time to no more than 6 hours from start time.")
-      end_time <- parsedate::parse_iso_8601(start_time) + lubridate::hours(6)
-      end_time <- parsedate::format_iso_8601(end_time)
-    }
-  }
-
-  # get the end result
+  # process for API retrieval
 
   latlong <- paste0(lat, ', ', long)
+
+  # get results
 
   result <- httr::content(
     httr::GET(

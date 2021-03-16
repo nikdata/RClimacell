@@ -1,0 +1,227 @@
+---
+title: "Usage"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{cc2_usage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE,
+  fig.height = 8,
+  fig.width = 5
+)
+```
+
+```{r setup, echo=FALSE}
+library(RClimacell)
+library(lubridate)
+library(dplyr)
+
+# load internal datasets
+
+# precipitation
+precip_1m <- RClimacell:::precip_1m
+precip_1h <- RClimacell:::precip_1h
+precip_1d <- RClimacell:::precip_1d
+
+# wind
+wind_1m <- RClimacell:::wind_1m
+wind_1h <- RClimacell:::wind_1h
+wind_1d <- RClimacell:::wind_1d
+
+# temperature
+temperature_1m <- RClimacell:::temperature_1m
+temperature_1h <- RClimacell:::temperature_1h
+temperature_1d <- RClimacell:::temperature_1d
+
+# celestial
+celestial_1d <- RClimacell:::celestial_1d
+```
+
+
+The {RClimacell} package provides four high-level wrapper functions to retrieve data from the Climacell API version 4 using the [Timeline Interface](https://docs.climacell.co/reference/timeline-overview):
+
+- `climacell_temperature`: obtains temperature related variables
+- `climacell_wind`: obtains wind related variables
+- `climacell_precip`: obtains precipitation related variables
+- `climacell_celestial`: obtains the sunrise time, sunset time, and the moon phase
+
+## Arguments
+
+All of the high level wrapper functions consist of the following 5 arguments:
+
+- `api_key`
+- `lat`
+- `long`
+- `timestep`
+- `start_time`
+- `end_time`
+
+### API Key
+
+A **valid** API key from Climacell is required to use any of the functions within this package. Obtaining an API key is free and is limited to 1000 calls per day when using the CORE layers. By default, the functions will try to find an environment variable (within the .Renviron file) called "CLIMACELL_API". If found, it will automatically use it. If you have a different environment variable name for the API key, you will need to explicity retrieve the environment variable and may not omit it from the function call.
+
+### Latitude & Longitude
+
+The latitude and longitude values are required and the functions will not work without them. Both of these values must be decimal values and cannot be in degrees, minutes, seconds, UTM, etc.
+
+### Timestep
+
+This argument identifies what interval the data must be in. For instance, if you are looking for daily data, then you'll want to set the timestep to '1d'. This field is limited to the following values only:
+
+| Timestep |        Interval       |                Lower Limit               |                 Upper Limit                |
+|:--------:|:---------------------:|:----------------------------------------:|:------------------------------------------:|
+|    1m    | 1 minute (per minute) | 6 hours prior to actual current UTC time |  6 hours ahead of actual current UTC time  |
+|    15m   |       15 minutes      | 6 hours prior to actual current UTC time |  6 hours ahead of actual current UTC time  |
+|    30m   |       30 minutes      | 6 hours prior to actual current UTC time |  6 hours ahead of actual current UTC time  |
+|    1h    |    1 hour (hourly)    | 6 hours prior to actual current UTC time | 108 hours ahead of actual current UTC time |
+|    1d    |     1 day (daily)     |          actual current UTC time         |  15 days ahead of actual current UTC time  |
+|  current |          n/a          |          actual current UTC time         |           actual current UTC time          |
+
+If a timestep of 'current' is used, then the start and end times will not be used.
+
+This field must be identified correctly or the functions will not work. The only exception is the `climacell_celestial()` function since it can **ONLY** use a timestep of '1d' (per the requirements of the API).
+
+### Start & End Times
+
+The start and end times help define the constraints around the data retrieval from the API. The start time is required; however, if it is missing, the functions will automatically use the current system time. If the system time is not reflective of the actual time, then the functions may not work as expected.
+
+The end time is optional due to the error handling built in to the functions. Typically, omitting the end time value will yield a warning (which can be safely ignored) and the function will create an end time (internally) that will return the maximum results based on the timestep value chosen.
+
+## Usage
+
+Detailed information on any of the variables returned by the functions can be found on the [CORE Layers page](https://docs.climacell.co/reference/data-layers-core).
+
+### Temperature
+
+The `climacell_temperature()` function returns the following variables:
+
+- `start_time`: the time of the reading. This value increments based on the timestep interval chosen (UTC).
+- `temp_c`: the temperature at the time of reading (degrees Celsius).
+- `temp_feel_c`: what the temperature actually feels like (degrees Celsius).
+- `dewpoint`: the dewpoint at the time of the reading (degrees Celsius).
+- `humidity`: the humidity at the time of the reading (%).
+
+```r
+library(dplyr)
+library(RClimacell)
+
+temperature_1m <- RClimacell::climacell_temperature(
+                                        api_key = Sys.getenv('CLIMACELL_API'),
+                                        timestep = '1m',
+                                        lat = 41.878876,
+                                        long = -87.635918,
+                                        start_time = Sys.time() - lubridate::hours(5),
+                                        end_time = NULL)
+dplyr::glimpse(temperature_1m)                                        
+```
+
+```{r temp1m_results, echo=FALSE}
+dplyr::glimpse(temperature_1m)
+```
+
+### Precipitation
+
+The `climacell_precip()` function returns the following variables:
+
+- `start_time`: the time of the reading. This value increments based on the timestep interval chosen (UTC).
+- `precipitation_intensity`: amount of precipitation that falls over time, covering the ground in a period of time (mm/hr).
+- `precipitation_probability`: chance of precipitation that at least some minimum quantity of precipitation will occur within a specified forecast period and location (%).
+- `precipitation_type_code`: types of precipitation often include the character or phase of the precipitation which is falling to ground level (code number returned by API).
+- `precipitation_type_desc`: long description of the precipitation_type_code.
+- `visibility`: measure of the distance at which an object or light can be clearly discerned (km).
+- `pressure_surface_level`: force exerted against a surface by the weight of the air above the surface (at the surface level) (hPa).
+- `pressure_sea_level`: force exerted against a surface by the weight of the air above the surface (at the mean sea level) (hPA).
+- `cloud_cover`: fraction of the sky obscured by clouds when observed from a particular location (%)
+- `cloud_base`: lowest altitude of the visible portion of a cloud (above ground level) (km)
+- `cloud_ceiling`: highest altitude of the visible portion of a cloud (above ground level) (km)
+- `solar_ghi`: amount of shortwave radiation received from above by a surface horizontal to the ground (W/m^2)
+- `weather_code`: code number that conveys the most prominent weather condition (code number returned by API)
+- `weather_desc`: long description of the weather_code
+
+Depending on the actual weather forecasts and conditions, not all of the variables will have values. If any column has an NA value, it simply means that the API did not return a value for that specific variable for that specific start time.
+
+```r
+library(dplyr)
+library(RClimacell)
+
+precip_1h <- RClimacell::climacell_precip(
+                                        api_key = Sys.getenv('CLIMACELL_API'),
+                                        timestep = '1h',
+                                        lat = 41.878876,
+                                        long = -87.635918,
+                                        start_time = Sys.time() - lubridate::hours(5),
+                                        end_time = NULL)
+dplyr::glimpse(precip_1h)                                        
+```
+
+```{r precip1h_results, echo=FALSE}
+dplyr::glimpse(precip_1h)
+```
+
+### Wind
+
+The `climacell_wind()` function returns the following variables:
+
+- `start_time`: the time of the reading. This value increments based on the timestep interval chosen (UTC).
+- `wind_speed`: atmospheric quantity caused by air moving from high to low pressure, usually due to changes in temperature (at 10m) (m/s).
+- `wind_gust`: maximum brief increase in the speed of the wind, usually less than 20 seconds (at 10m) (m/s).
+- `wind_direction`: direction from which it originates, measured in degrees clockwise from due north (at 10m) (degrees)
+
+Depending on the actual weather forecasts and conditions, not all of the variables will have values. If any column has an NA value, it simply means that the API did not return a value for that specific variable for that specific start time.
+
+```r
+library(dplyr)
+library(RClimacell)
+
+wind_1m <- RClimacell::climacell_wind(
+                                        api_key = Sys.getenv('CLIMACELL_API'),
+                                        timestep = '1m',
+                                        lat = 41.878876,
+                                        long = -87.635918,
+                                        start_time = Sys.time() - lubridate::hours(5),
+                                        end_time = NULL)
+
+dplyr::glimpse(wind_1m)
+```
+
+```{r wind1m_results, echo=FALSE}
+dplyr::glimpse(wind_1m)
+```
+
+### Celestial
+
+The `climacell_celestial()` function returns the following variables:
+
+- start_time: the time of the reading. This value increments based on the timestep interval chosen (UTC).
+- sunrise_time: appearance of the Sun on the horizon due to Earth's rotation (UTC).
+- sunset_time: disappearance of the Sun below the horizon due to Earth's rotation (UTC).
+- moon_phase_code: shape of the directly sunlit portion of the Moon as viewed from Earth.
+- moon_phase_description: long description of the moon_phase_code.
+
+Note that the `timestep` value for this function can **only** be '1d'.
+
+```r
+library(dplyr)
+library(RClimacell)
+
+celestial_1d <- RClimacell::climacell_celestial(
+                                        api_key = Sys.getenv('CLIMACELL_API'),
+                                        timestep = '1d',
+                                        lat = 41.878876,
+                                        long = -87.635918,
+                                        start_time = Sys.time(),
+                                        end_time = NULL)
+
+dplyr::glimpse(celestial_1d)
+```
+
+```{r celestial1d_results, echo=FALSE}
+dplyr::glimpse(celestial_1d)
+```

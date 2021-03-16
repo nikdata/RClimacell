@@ -1,3 +1,11 @@
+# RClimacell (development version)
+
+* added new function `climacell_celestial()` that retrieves the sunrise and sunset times along with the moon phase
+* removed the need to use the package {parsedate} and removed {parsedate} from dependency list
+* input dates no longer have to be in ISO8601 format (recommended to use the {lubridate} package or `Sys.time()` when entering date-time stamps)
+* drastically improved error handling for dates/times provided by user
+* updated vignettes
+
 # RClimacell 0.1.3
 
 * fixed a bug where the user user provided API key was not used

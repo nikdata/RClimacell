@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RClimacell</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9000</span>
       </span>
     </div>
 
@@ -84,17 +84,34 @@
   </a>
 </li>
 <li>
-  <a href="../articles/RClimacell.html">Get started</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/cc1_intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="../articles/cc2_usage.html">Usage</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/nikdata/RClimacell/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -109,9 +126,29 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      
+      <small>Source: <a href='https://github.com/nikdata/RClimacell/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="rclimacell-development-version" class="section level1">
+<h1 class="page-header" data-toc-text="development version">
+<a href="#rclimacell-development-version" class="anchor"></a>RClimacell (development version)<small> Unreleased </small>
+</h1>
+<ul>
+<li>added new function <code><a href="../reference/climacell_celestial.html">climacell_celestial()</a></code> that retrieves the sunrise and sunset times along with the moon phase</li>
+<li>removed the need to use the package {parsedate} and removed {parsedate} from dependency list</li>
+<li>input dates no longer have to be in ISO8601 format (recommended to use the {lubridate} package or <code><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time()</a></code> when entering date-time stamps)</li>
+<li>drastically improved error handling for dates/times provided by user</li>
+<li>updated vignettes</li>
+</ul>
+</div>
+    <div id="rclimacell-013" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.3">
+<a href="#rclimacell-013" class="anchor"></a>RClimacell 0.1.3<small> 2021-03-11 </small>
+</h1>
+<ul>
+<li>fixed a bug where the user user provided API key was not used</li>
+</ul>
+</div>
     <div id="rclimacell-012" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.2">
 <a href="#rclimacell-012" class="anchor"></a>RClimacell 0.1.2<small> 2021-03-02 </small>
