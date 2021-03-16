@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">RClimacell</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9000</span>
       </span>
     </div>
 
@@ -47,10 +47,22 @@
   </a>
 </li>
 <li>
-  <a href="articles/RClimacell.html">Get started</a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/cc1_intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="articles/cc2_usage.html">Usage</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="news/index.html">Changelog</a>
@@ -106,6 +118,7 @@
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
+<p>Not every variable in each of the functions will have a value. Missing values are denoted by NA and indicate that the API did not return a value for the specific date/time and function call.</p>
 <div id="temperature" class="section level3">
 <h3 class="hasAnchor">
 <a href="#temperature" class="anchor"></a>Temperature</h3>
@@ -120,10 +133,10 @@
 <span class="co">#&gt; # A tibble: 4 x 5</span>
 <span class="co">#&gt;   start_time          temp_c temp_feel_c dewpoint humidity</span>
 <span class="co">#&gt;   &lt;dttm&gt;               &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 2021-02-26 12:00:00   4.58        4.25     2.13     88.0</span>
-<span class="co">#&gt; 2 2021-02-27 12:00:00   8.79        8.79     2.33     96.2</span>
-<span class="co">#&gt; 3 2021-02-28 12:00:00   8.87        8.87     6.16     97.8</span>
-<span class="co">#&gt; 4 2021-03-01 12:00:00   0.82       -5.74    -4.97     86.2</span></code></pre></div>
+<span class="co">#&gt; 1 2021-03-16 11:00:00   2.22       -0.38     0.96     96  </span>
+<span class="co">#&gt; 2 2021-03-17 11:00:00   3.27       -1.34     1.67     93.3</span>
+<span class="co">#&gt; 3 2021-03-18 11:00:00   4.55        4.55     1.64     90.4</span>
+<span class="co">#&gt; 4 2021-03-19 11:00:00   1.55       -3.44    -4.88     64.4</span></code></pre></div>
 </div>
 <div id="wind" class="section level3">
 <h3 class="hasAnchor">
@@ -139,10 +152,10 @@
 <span class="co">#&gt; # A tibble: 4 x 4</span>
 <span class="co">#&gt;   start_time          wind_speed wind_gust wind_direction</span>
 <span class="co">#&gt;   &lt;dttm&gt;                   &lt;dbl&gt;     &lt;dbl&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 2021-02-26 12:00:00       6.53      9.23           185.</span>
-<span class="co">#&gt; 2 2021-02-27 12:00:00       6.53      9.23           179.</span>
-<span class="co">#&gt; 3 2021-02-28 12:00:00       8.55     11.6            260.</span>
-<span class="co">#&gt; 4 2021-03-01 12:00:00       9.31     13.2            281.</span></code></pre></div>
+<span class="co">#&gt; 1 2021-03-16 11:00:00       3.55      4.88           47.8</span>
+<span class="co">#&gt; 2 2021-03-17 11:00:00      12.7      18.4            40.9</span>
+<span class="co">#&gt; 3 2021-03-18 11:00:00      13.9      20.4            28.7</span>
+<span class="co">#&gt; 4 2021-03-19 11:00:00       9.35     13.7            34.7</span></code></pre></div>
 </div>
 <div id="precipitation" class="section level3">
 <h3 class="hasAnchor">
@@ -158,20 +171,42 @@
 
 <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">df_precip</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 73</span>
-<span class="co">#&gt; Columns: 13</span>
-<span class="co">#&gt; $ start_time                &lt;dttm&gt; 2021-02-26 19:33:00, 2021-02-26 20:33:00, …</span>
-<span class="co">#&gt; $ precipitation_intensity   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…</span>
-<span class="co">#&gt; $ precipitation_probability &lt;dbl&gt; 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.5, 12.…</span>
-<span class="co">#&gt; $ precipitation_type_code   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span>
-<span class="co">#&gt; $ precipitation_type_desc   &lt;chr&gt; "Rain", "Rain", "Rain", "Rain", "Rain", "Ra…</span>
-<span class="co">#&gt; $ visibility                &lt;dbl&gt; 10.00, 16.00, 16.00, 16.00, 16.00, 16.00, 1…</span>
-<span class="co">#&gt; $ pressure_surface_level    &lt;dbl&gt; 999.40, 998.43, 997.61, 997.11, 996.58, 995…</span>
-<span class="co">#&gt; $ pressure_sea_level        &lt;dbl&gt; 1020.59, 1016.96, 1016.25, 1015.72, 1015.11…</span>
-<span class="co">#&gt; $ cloud_cover               &lt;dbl&gt; 0.00, 2.65, 55.75, 100.00, 100.00, 100.00, …</span>
-<span class="co">#&gt; $ cloud_base                &lt;dbl&gt; NA, NA, 4.14, 3.58, 3.07, 2.68, 2.59, 1.88,…</span>
-<span class="co">#&gt; $ cloud_ceiling             &lt;dbl&gt; NA, NA, NA, NA, 2.89, 2.89, 2.46, 1.85, 2.0…</span>
-<span class="co">#&gt; $ weather_code              &lt;dbl&gt; 1000, 1000, 1101, 1001, 1001, 1001, 1001, 1…</span>
-<span class="co">#&gt; $ weather_desc              &lt;chr&gt; "Clear", "Clear", "Partly Cloudy", "Cloudy"…</span></code></pre></div>
+<span class="co">#&gt; Columns: 14</span>
+<span class="co">#&gt; $ start_time                &lt;dttm&gt; 2021-03-16 21:19:00, 2021-03-16 22:19:00, 2…</span>
+<span class="co">#&gt; $ precipitation_intensity   &lt;dbl&gt; 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.…</span>
+<span class="co">#&gt; $ precipitation_probability &lt;dbl&gt; 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,…</span>
+<span class="co">#&gt; $ precipitation_type_code   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…</span>
+<span class="co">#&gt; $ precipitation_type_desc   &lt;chr&gt; "Rain", "Rain", "Rain", "Rain", "Rain", "Rai…</span>
+<span class="co">#&gt; $ visibility                &lt;dbl&gt; 10.00, 14.03, 15.29, 15.89, 15.74, 15.49, 15…</span>
+<span class="co">#&gt; $ pressure_surface_level    &lt;dbl&gt; 999.07, 999.39, 999.31, 999.93, 1001.00, 100…</span>
+<span class="co">#&gt; $ pressure_sea_level        &lt;dbl&gt; 1019.01, 1017.95, 1017.84, 1018.43, 1019.53,…</span>
+<span class="co">#&gt; $ cloud_cover               &lt;dbl&gt; 0.00, 100.00, 100.00, 100.00, 100.00, 100.00…</span>
+<span class="co">#&gt; $ cloud_base                &lt;dbl&gt; NA, 0.28, 0.32, 0.38, 0.48, 0.49, 0.49, 0.36…</span>
+<span class="co">#&gt; $ cloud_ceiling             &lt;dbl&gt; NA, 0.33, 0.37, 0.44, 0.45, 0.45, 0.45, 0.45…</span>
+<span class="co">#&gt; $ solar_ghi                 &lt;dbl&gt; 415.38, 30.96, 15.12, 0.00, 0.00, 0.00, 0.00…</span>
+<span class="co">#&gt; $ weather_code              &lt;dbl&gt; 1000, 1001, 1001, 1001, 1001, 1001, 1001, 10…</span>
+<span class="co">#&gt; $ weather_desc              &lt;chr&gt; "Clear", "Cloudy", "Cloudy", "Cloudy", "Clou…</span></code></pre></div>
+</div>
+<div id="celestial-sunset-time-sunrise-time-and-moon-phase" class="section level3">
+<h3 class="hasAnchor">
+<a href="#celestial-sunset-time-sunrise-time-and-moon-phase" class="anchor"></a>Celestial (sunset time, sunrise time, and moon phase)</h3>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://nikdata.github.io/RClimacell/">RClimacell</a></span><span class="op">)</span>
+<span class="va">df_celestial</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/climacell_celestial.html">climacell_celestial</a></span><span class="op">(</span>api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"CLIMACELL_API"</span><span class="op">)</span>,
+                 lat <span class="op">=</span> <span class="fl">41.878685</span>,
+                 long <span class="op">=</span> <span class="op">-</span><span class="fl">87.636011</span>,
+                 timestep <span class="op">=</span> <span class="st">'1d'</span>,
+                 start_time <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/now.html">now</a></span><span class="op">(</span><span class="op">)</span>,
+                 end_time <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/now.html">now</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">df_celestial</span><span class="op">)</span>
+<span class="co">#&gt; Rows: 6</span>
+<span class="co">#&gt; Columns: 5</span>
+<span class="co">#&gt; $ start_time             &lt;dttm&gt; 2021-03-16 11:00:00, 2021-03-17 11:00:00, 2021…</span>
+<span class="co">#&gt; $ sunrise_time           &lt;dttm&gt; 2021-03-16 12:00:00, 2021-03-17 11:58:20, 2021…</span>
+<span class="co">#&gt; $ sunset_time            &lt;dttm&gt; 2021-03-16 23:58:20, 2021-03-18 00:00:00, 2021…</span>
+<span class="co">#&gt; $ moon_phase_code        &lt;int&gt; 1, 1, 1, 2, 2, 2</span>
+<span class="co">#&gt; $ moon_phase_description &lt;chr&gt; "Waxing Crescent", "Waxing Crescent", "Waxing C…</span></code></pre></div>
 <p>See the <a href="https://nikdata.github.io/RClimacell/">vignette</a> for more information.</p>
 </div>
 </div>

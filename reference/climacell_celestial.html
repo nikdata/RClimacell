@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Temperature Readings from Climacell — climacell_temperature • RClimacell</title>
+<title>Sunrise, Sunset, and Moon Phase Readings from Climacell — climacell_celestial • RClimacell</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Temperature Readings from Climacell — climacell_temperature" />
-<meta property="og:description" content="This function will make a call to the Climacell API and retrieve temperature related variables." />
+<meta property="og:title" content="Sunrise, Sunset, and Moon Phase Readings from Climacell — climacell_celestial" />
+<meta property="og:description" content="This function will make a call to the Climacell API and retrieve sunrise, sunset times and moon phase variables." />
 
 
 
@@ -126,20 +126,20 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Temperature Readings from Climacell</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nikdata/RClimacell/blob/master/R/climacell_temperature.R'><code>R/climacell_temperature.R</code></a></small>
-    <div class="hidden name"><code>climacell_temperature.Rd</code></div>
+    <h1>Sunrise, Sunset, and Moon Phase Readings from Climacell</h1>
+    <small class="dont-index">Source: <a href='https://github.com/nikdata/RClimacell/blob/master/R/climacell_celestial.R'><code>R/climacell_celestial.R</code></a></small>
+    <div class="hidden name"><code>climacell_celestial.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function will make a call to the Climacell API and retrieve temperature related variables.</p>
+    <p>This function will make a call to the Climacell API and retrieve sunrise, sunset times and moon phase variables.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>climacell_temperature</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>climacell_celestial</span><span class='op'>(</span>
   <span class='va'>api_key</span>,
   <span class='va'>lat</span>,
   <span class='va'>long</span>,
-  <span class='va'>timestep</span>,
+  timestep <span class='op'>=</span> <span class='st'>"1d"</span>,
   start_time <span class='op'>=</span> <span class='cn'>NULL</span>,
   end_time <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
@@ -161,7 +161,7 @@
     </tr>
     <tr>
       <th>timestep</th>
-      <td><p>a 'step' value for the time. Choose one of the following valid values: c('1d', '1h', '30m','15m','5m','1m','current').</p></td>
+      <td><p>a 'step' value for the time. For the <code>climacell_celestial</code> function, the only acceptable value (per the limitations of the Climacell API) is '1d'.</p></td>
     </tr>
     <tr>
       <th>start_time</th>
@@ -169,7 +169,7 @@
     </tr>
     <tr>
       <th>end_time</th>
-      <td><p>the end time of the query. This input must be a character string that can be parsed into a data/time or a date/time value. If the input does not contain a timezone, the value will be assumed to be in UTC. OPTIONAL if timestep is 'current' or if the user desires to get the maximum results possible (depends on the timestep chosen).</p></td>
+      <td><p>the end time of the query. This input must be a character string that can be parsed into a data/time or a date/time value. If the input does not contain a timezone, the value will be assumed to be in UTC. For this function, the end_time cannot be greater than 15 days from the current date/time.</p></td>
     </tr>
     </table>
 
@@ -178,15 +178,17 @@
     <p>a tibble</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>climacell_temperature</code> returns a tibble that consists of temperature related variables (returned values are in metric units) using the Climacell API. These variables consist of temperature, a "feels like" temperature, dewpoint, and humidity.</p>
+    <p><code>climacell_celestial</code> returns a tibble that consists of sunrise/sunset times along with the moon phase (code &amp; description).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>climacell_temperature</span><span class='op'>(</span>
+<span class='fu'>climacell_celestial</span><span class='op'>(</span>
   api_key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span><span class='op'>(</span><span class='st'>'CLIMACELL_API'</span><span class='op'>)</span>,
   lat <span class='op'>=</span> <span class='fl'>0</span>,
   long <span class='op'>=</span> <span class='fl'>0</span>,
-  timestep <span class='op'>=</span> <span class='st'>'current'</span><span class='op'>)</span>
+  timestep <span class='op'>=</span> <span class='st'>'1d'</span>,
+  start_time <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/now.html'>now</a></span><span class='op'>(</span><span class='op'>)</span>,
+  end_time <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/now.html'>now</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/period.html'>days</a></span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div></pre>
   </div>
