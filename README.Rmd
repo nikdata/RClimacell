@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/RClimacell)](https://CRAN.R-project.org/package=RClimacell)
 <!-- badges: end -->
 
-The {RClimacell} package is an **unofficial** R package that enables basic interaction with [Climacell's](https://www.climacell.co) API using the [Timeline Interface](https://docs.climacell.co/reference/timeline-overview). The functions within this package are tested against some of the [CORE data layers](https://docs.climacell.co/reference/data-layers-core). 
+The {RClimacell} package is an **unofficial** R package that enables basic interaction with [Climacell's](https://www.climacell.co) API using the [Timeline Interface](https://docs.climacell.co/reference/timeline-overview). The functions within this package are tested against some of the [Core data layers](https://docs.climacell.co/reference/data-layers-core). 
 
 Please note that using the functions within this package **require** a valid API key.
 

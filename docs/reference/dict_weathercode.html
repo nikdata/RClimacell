@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • RClimacell</title>
+<title>Weather Dictionary — dict_weathercode • RClimacell</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Weather Dictionary — dict_weathercode" />
+<meta property="og:description" content="this is a helper function that returns the weather code tibble containing the weather codes (which are returned by Climacell API) and their appropriate description." />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -125,66 +126,28 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/nikdata/RClimacell/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Weather Dictionary</h1>
+    <small class="dont-index">Source: <a href='https://github.com/nikdata/RClimacell/blob/master/R/climacell_dict.R'><code>R/climacell_dict.R</code></a></small>
+    <div class="hidden name"><code>dict_weathercode.Rd</code></div>
     </div>
 
-    <div id="rclimacell-development-version" class="section level1">
-<h1 class="page-header" data-toc-text="development version">
-<a href="#rclimacell-development-version" class="anchor"></a>RClimacell (development version)<small> Unreleased </small>
-</h1>
-<ul>
-<li>added new function <code><a href="../reference/climacell_core.html">climacell_core()</a></code> that retrieves all core layer data from Timeline Interface</li>
-<li>added new function <code><a href="../reference/climacell_celestial.html">climacell_celestial()</a></code> that retrieves the sunrise and sunset times along with the moon phase</li>
-<li>removed the need to use the package {parsedate} and removed {parsedate} from dependency list</li>
-<li>input dates no longer have to be in ISO8601 format (recommended to use the {lubridate} package or <code><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time()</a></code> when entering date-time stamps)</li>
-<li>drastically improved error handling for dates/times provided by user</li>
-<li>updated vignettes</li>
-</ul>
-</div>
-    <div id="rclimacell-013" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.3">
-<a href="#rclimacell-013" class="anchor"></a>RClimacell 0.1.3<small> 2021-03-11 </small>
-</h1>
-<ul>
-<li>fixed a bug where the user provided API key was not used</li>
-</ul>
-</div>
-    <div id="rclimacell-012" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.2">
-<a href="#rclimacell-012" class="anchor"></a>RClimacell 0.1.2<small> 2021-03-02 </small>
-</h1>
-<ul>
-<li>Climacell API does not return results unless non-zero values are present for pressure; added extra steps to account for this.</li>
-</ul>
-</div>
-    <div id="rclimacell-011" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.1">
-<a href="#rclimacell-011" class="anchor"></a>RClimacell 0.1.1<small> Unreleased </small>
-</h1>
-<ul>
-<li>fixed a bug where the <code><a href="../reference/climacell_precip.html">climacell_precip()</a></code> function would not return results for the correct lat/long and <code>timestep</code> argument.</li>
-<li>fixed a coding error where the start and end times were not parameterized prior to calling the API.</li>
-<li>improved the way cloud cover results are handled when using the <code><a href="../reference/climacell_precip.html">climacell_precip()</a></code> function.</li>
-</ul>
-</div>
-    <div id="rclimacell-010" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.0">
-<a href="#rclimacell-010" class="anchor"></a>RClimacell 0.1.0<small> 2021-02-15 </small>
-</h1>
-<ul>
-<li>Initial release</li>
-<li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
-</ul>
-</div>
-  </div>
+    <div class="ref-description">
+    <p>this is a helper function that returns the weather code tibble containing the weather codes (which are returned by Climacell API) and their appropriate description.</p>
+    </div>
 
+    <pre class="usage"><span class='fu'>dict_weathercode</span><span class='op'>(</span><span class='op'>)</span></pre>
+
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a tibble</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
-
 </div>
 
 

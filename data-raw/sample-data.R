@@ -84,6 +84,22 @@ celestial_1d <- RClimacell::climacell_celestial(api_key = api,
                                                   start_time = st,
                                                   end_time = NULL)
 
+# Climacell Core
+core_1m <- RClimacell::climacell_core(api_key = api,
+                                                timestep = '1m',
+                                                lat = lat_val,
+                                                long = long_val,
+                                                start_time = st,
+                                                end_time = NULL)
+
+# Climacell Core
+core_1d <- RClimacell::climacell_core(api_key = api,
+                                           timestep = '1d',
+                                           lat = lat_val,
+                                           long = long_val,
+                                           start_time = st,
+                                           end_time = NULL)
+
 # write datasets out internally
-usethis::use_data(precip_1m, precip_1h, precip_1d, temperature_1m, temperature_1h, temperature_1d, wind_1m, wind_1h, wind_1d, celestial_1d, internal = T, overwrite = T)
+usethis::use_data(precip_1m, precip_1h, precip_1d, temperature_1m, temperature_1h, temperature_1d, wind_1m, wind_1h, wind_1d, celestial_1d, core_1m, core_1d, internal = T, overwrite = T)
 

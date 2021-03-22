@@ -1,6 +1,6 @@
 Package: RClimacell
 Title: R Wrapper for the 'Climacell' API
-Version: 0.1.3.9000
+Version: 0.1.4
 Authors@R: 
     person(given = "Nikhil",
            family = "Agarwal",

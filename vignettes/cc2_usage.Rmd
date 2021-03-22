@@ -42,15 +42,20 @@ temperature_1d <- RClimacell:::temperature_1d
 
 # celestial
 celestial_1d <- RClimacell:::celestial_1d
+
+# core
+core_1m <- RClimacell:::core_1m
+core_1d <- RClimacell:::core_1d
 ```
 
 
-The {RClimacell} package provides four high-level wrapper functions to retrieve data from the Climacell API version 4 using the [Timeline Interface](https://docs.climacell.co/reference/timeline-overview):
+The {RClimacell} package provides four high-level wrapper functions to retrieve the Core layer data fields from the Climacell API version 4 using the [Timeline Interface](https://docs.climacell.co/reference/timeline-overview):
 
 - `climacell_temperature`: obtains temperature related variables
 - `climacell_wind`: obtains wind related variables
 - `climacell_precip`: obtains precipitation related variables
 - `climacell_celestial`: obtains the sunrise time, sunset time, and the moon phase
+- `climacell_core`: obtains all of the data fields from the [Core](https://docs.climacell.co/reference/data-layers-core) data layer using the Timeline interface
 
 ## Arguments
 
@@ -225,3 +230,33 @@ dplyr::glimpse(celestial_1d)
 ```{r celestial1d_results, echo=FALSE}
 dplyr::glimpse(celestial_1d)
 ```
+
+
+### Core
+
+The `climacell_core()` function returns all of the variables in the aforementioned function calls. Note that the `timestep` must be equal to '1d' if any of the celestial fields (e.g., moon phase, sunrise time, sunset time) are desired.
+
+```r
+library(dplyr)
+library(RClimacell)
+
+core_1m <- RClimacell::climacell_core(
+                                        api_key = Sys.getenv('CLIMACELL_API'),
+                                        timestep = '1d',
+                                        lat = 41.878876,
+                                        long = -87.635918,
+                                        start_time = Sys.time(),
+                                        end_time = NULL)
+
+dplyr::glimpse(core_1m)
+```
+```{r core1m_results, echo=FALSE}
+dplyr::glimpse(core_1m)
+```
+
+Using a `timestep` of '1d' results in the following:
+
+```{r core1d_results, echo=FALSE}
+dplyr::glimpse(core_1d)
+```
+

@@ -1,4 +1,4 @@
-# RClimacell (development version)
+# RClimacell 0.1.4
 
 * added new function `climacell_core()` that retrieves all core layer data from Timeline Interface
 * added new function `climacell_celestial()` that retrieves the sunrise and sunset times along with the moon phase

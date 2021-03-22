@@ -22,22 +22,23 @@ knitr::opts_chunk$set(
 library(RClimacell)
 ```
 
-The {RClimacell} R package provides a high level wrapper around the Climacell version 4 API using the [Timeline Interface](https://docs.climacell.co/reference/timeline-overview). Currently, the package only provides access to some of the [CORE](https://docs.climacell.co/reference/data-layers-core) layers provided by Climacell. Many of the API functions are only available to paid subscribers. Since I don't have a paid developer account, I am unable to create R functions for many different Climacell API calls.
+The {RClimacell} R package provides a high level wrapper around the Climacell version 4 API using the [Timeline Interface](https://docs.climacell.co/reference/timeline-overview). Currently, the {RClimacell} package only provides access to the [Core](https://docs.climacell.co/reference/data-layers-core) data fields using the [Timeline Interface](https://docs.climacell.co/reference/timeline-overview). Each function call results in one API call and the free API (registration required) has both hourly rate limits and daily limits.
 
 ## Functions
 
-The {RClimacell} package consists of four functions:
+The {RClimacell} package consists of five functions:
 
 - `climacell_temperature`: obtains temperature related variables
 - `climacell_wind`: obtains wind related variables
 - `climacell_precip`: obtains precipitation related variables
 - `climacell_celestial`: obtains the sunrise time, sunset time, and the moon phase
+- `climacell_core`: obtains all of the data fields from the [Core](https://docs.climacell.co/reference/data-layers-core) data layer using the Timeline interface
 
 Each of these functions returns a formatted tibble in which each column is correctly encoded.
 
-## Climacell API CORE Layers
+## Climacell API Core Data Layer Fields
 
-The following table summarizes which CORE layers are available in the current package version:
+The following table summarizes which Core layers are available in the current package version (all of these fields can be obtained using the `climacell_core()` function):
 
 |         API Field        | {RClimacell} Equivalent Name | Implemented in package? |     Part of Function      |
 |:------------------------:|:----------------------------:|:-----------------------:|:-------------------------:|
@@ -67,7 +68,7 @@ The following table summarizes which CORE layers are available in the current pa
 
 ### API Call Limits
 
-The Climacell API has certain limitations based on the subscription tier. This package is tested using the free tier. Due to this limitation, the author is only able to provide access to the CORE layers. Note that the free tier allows for 1,000 calls per day to CORE layers.
+The Climacell API has certain limitations based on the subscription tier. This package is tested using the free tier. Due to this limitation, the author is only able to provide access to the Core layers. Note that the free tier [allows](https://www.climacell.co/weather-api/) for 500 calls per day, 25 calls per hour, and 3 calls per second (these limitations can change without notice).
 
 ### Date/Time Range Limits
 
@@ -89,3 +90,7 @@ Up to date information on these limits can be found [here](https://docs.climacel
 Version 4 of the Climacell API returns all values in metric and UTC times. The {RClimacell} package is designed to return the values returned by the API call with minimal modifications. Most of the modifications are to ensure that the appropriate data value types are used. For instance, codes are typically integers and are coded as such.
 
 Please note that the UTC times are in [ISO 8601 standard](https://en.wikipedia.org/wiki/ISO_8601).
+
+### Missing Values
+
+At times, the API will not return values for every data field. This can be due to a variety of reasons and no explanation or warning is provided by the API. `NA` values simply imply that no value was returned by the API for the respective data field.
