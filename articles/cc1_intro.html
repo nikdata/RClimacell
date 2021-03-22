@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RClimacell</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
@@ -95,11 +95,11 @@
 
     
     
-<p>The {RClimacell} R package provides a high level wrapper around the Climacell version 4 API using the <a href="https://docs.climacell.co/reference/timeline-overview">Timeline Interface</a>. Currently, the package only provides access to some of the <a href="https://docs.climacell.co/reference/data-layers-core">CORE</a> layers provided by Climacell. Many of the API functions are only available to paid subscribers. Since I don’t have a paid developer account, I am unable to create R functions for many different Climacell API calls.</p>
+<p>The {RClimacell} R package provides a high level wrapper around the Climacell version 4 API using the <a href="https://docs.climacell.co/reference/timeline-overview">Timeline Interface</a>. Currently, the {RClimacell} package only provides access to the <a href="https://docs.climacell.co/reference/data-layers-core">Core</a> data fields using the <a href="https://docs.climacell.co/reference/timeline-overview">Timeline Interface</a>. Each function call results in one API call and the free API (registration required) has both hourly rate limits and daily limits.</p>
 <div id="functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#functions" class="anchor"></a>Functions</h2>
-<p>The {RClimacell} package consists of four functions:</p>
+<p>The {RClimacell} package consists of five functions:</p>
 <ul>
 <li>
 <code>climacell_temperature</code>: obtains temperature related variables</li>
@@ -109,13 +109,15 @@
 <code>climacell_precip</code>: obtains precipitation related variables</li>
 <li>
 <code>climacell_celestial</code>: obtains the sunrise time, sunset time, and the moon phase</li>
+<li>
+<code>climacell_core</code>: obtains all of the data fields from the <a href="https://docs.climacell.co/reference/data-layers-core">Core</a> data layer using the Timeline interface</li>
 </ul>
 <p>Each of these functions returns a formatted tibble in which each column is correctly encoded.</p>
 </div>
-<div id="climacell-api-core-layers" class="section level2">
+<div id="climacell-api-core-data-layer-fields" class="section level2">
 <h2 class="hasAnchor">
-<a href="#climacell-api-core-layers" class="anchor"></a>Climacell API CORE Layers</h2>
-<p>The following table summarizes which CORE layers are available in the current package version:</p>
+<a href="#climacell-api-core-data-layer-fields" class="anchor"></a>Climacell API Core Data Layer Fields</h2>
+<p>The following table summarizes which Core layers are available in the current package version (all of these fields can be obtained using the <code><a href="../reference/climacell_core.html">climacell_core()</a></code> function):</p>
 <table class="table">
 <colgroup>
 <col width="24%">
@@ -265,7 +267,7 @@
 <div id="api-call-limits" class="section level3">
 <h3 class="hasAnchor">
 <a href="#api-call-limits" class="anchor"></a>API Call Limits</h3>
-<p>The Climacell API has certain limitations based on the subscription tier. This package is tested using the free tier. Due to this limitation, the author is only able to provide access to the CORE layers. Note that the free tier allows for 1,000 calls per day to CORE layers.</p>
+<p>The Climacell API has certain limitations based on the subscription tier. This package is tested using the free tier. Due to this limitation, the author is only able to provide access to the Core layers. Note that the free tier <a href="https://www.climacell.co/weather-api/">allows</a> for 500 calls per day, 25 calls per hour, and 3 calls per second (these limitations can change without notice).</p>
 </div>
 <div id="datetime-range-limits" class="section level3">
 <h3 class="hasAnchor">
@@ -330,6 +332,11 @@
 <a href="#units" class="anchor"></a>Units</h3>
 <p>Version 4 of the Climacell API returns all values in metric and UTC times. The {RClimacell} package is designed to return the values returned by the API call with minimal modifications. Most of the modifications are to ensure that the appropriate data value types are used. For instance, codes are typically integers and are coded as such.</p>
 <p>Please note that the UTC times are in <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601 standard</a>.</p>
+</div>
+<div id="missing-values" class="section level3">
+<h3 class="hasAnchor">
+<a href="#missing-values" class="anchor"></a>Missing Values</h3>
+<p>At times, the API will not return values for every data field. This can be due to a variety of reasons and no explanation or warning is provided by the API. <code>NA</code> values simply imply that no value was returned by the API for the respective data field.</p>
 </div>
 </div>
   </div>
