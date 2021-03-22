@@ -27,7 +27,8 @@ Imports:
     lubridate (>= 1.7.9.2),
     rlang (>= 0.4.10),
     tidyr (>= 1.1.2),
-    assertthat (>= 0.2.1)
+    assertthat (>= 0.2.1),
+    tidyselect
 Suggests: 
     knitr,
     rmarkdown

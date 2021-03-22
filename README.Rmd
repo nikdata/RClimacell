@@ -106,4 +106,33 @@ df_celestial <- climacell_celestial(api_key = Sys.getenv("CLIMACELL_API"),
 dplyr::glimpse(df_celestial)
 ```
 
+### Climacell Core (all Core Layer data)
+
+This function aims to retrieve all of the Core Layer data using the Timeline Interface. All of the data are retrieved in a single API call. Note that if the timestep is not '1d', then the moon phase, sunrise time, and sunset times will not be available
+
+```{r}
+library(RClimacell)
+df_core <- climacell_core(api_key = Sys.getenv("CLIMACELL_API"),
+                 lat = 41.878685,
+                 long = -87.636011,
+                 timestep = '1m',
+                 start_time = lubridate::now(),
+                 end_time = lubridate::now() + lubridate::hours(3))
+
+dplyr::glimpse(df_core)
+```
+
+```{r}
+library(RClimacell)
+df_core2 <- climacell_core(api_key = Sys.getenv("CLIMACELL_API"),
+                 lat = 41.878685,
+                 long = -87.636011,
+                 timestep = '1d',
+                 start_time = lubridate::now(),
+                 end_time = lubridate::now() + lubridate::days(5))
+
+dplyr::glimpse(df_core2)
+```
+
+
 See the [vignette](https://nikdata.github.io/RClimacell/) for more information.
