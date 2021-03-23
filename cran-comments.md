@@ -10,4 +10,4 @@ There were no ERRORs, WARNINGs, or NOTEs on local install
 
 There were no ERRORs, WARNINGs, or NOTEs
 
-This is a bug fix update.
+This update includes new features, improved error handling, and some bug fixes..
